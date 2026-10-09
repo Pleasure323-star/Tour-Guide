@@ -26,6 +26,16 @@ export function playStoreUrl(): string {
   return readEnv("NEXT_PUBLIC_PLAY_STORE_URL");
 }
 
+export function desktopDownloadUrl(): string {
+  const value = readEnv("NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL");
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:" ? value : "";
+  } catch {
+    return "";
+  }
+}
+
 export function gtmScriptUrl(): string {
   return readEnv("NEXT_PUBLIC_GTM_SCRIPT_URL");
 }
