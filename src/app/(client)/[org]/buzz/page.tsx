@@ -25,6 +25,7 @@ import {
 
 export default function MeetingPage() {
   const [roomId, setRoomId] = useState("");
+  const [joinError, setJoinError] = useState("");
   const [startLoading, setStartLoading] = useState(false);
   const [joinLoading, setJoinLoading] = useState(false);
   const [isLaterModalOpen, setIsLaterModalOpen] = useState(false);
@@ -35,16 +36,28 @@ export default function MeetingPage() {
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!roomId.trim() || !orgSlug) return;
-
-    setJoinLoading(true);
+    if (!orgSlug) return;
 
     let extractedId = roomId.trim();
     if (extractedId.includes("/")) {
-      const parts = extractedId.split("/");
-      extractedId = parts[parts.length - 1] || extractedId;
+      try {
+        const url = new URL(extractedId, window.location.origin);
+        extractedId =
+          url.protocol === "http:" || url.protocol === "https:"
+            ? url.pathname.match(/^\/[^/]+\/buzz\/([^/]+)\/?$/)?.[1] || ""
+            : "";
+      } catch {
+        extractedId = "";
+      }
     }
 
+    if (!/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/.test(extractedId)) {
+      setJoinError("Enter a valid Buzz code or link.");
+      return;
+    }
+
+    setJoinError("");
+    setJoinLoading(true);
     openBuzzInNewTab(orgSlug, extractedId);
     setJoinLoading(false);
   };
@@ -174,9 +187,23 @@ export default function MeetingPage() {
                 type="text"
                 placeholder="Enter a code or link"
                 value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
+                onChange={(e) => {
+                  setRoomId(e.target.value);
+                  setJoinError("");
+                }}
+                aria-invalid={Boolean(joinError)}
+                aria-describedby={joinError ? "buzz-join-error" : undefined}
                 className="w-full md:w-64 pl-10 pr-4 py-3.5 border border-zinc-300 rounded-md focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all"
               />
+              {joinError && (
+                <p
+                  id="buzz-join-error"
+                  role="alert"
+                  className="absolute left-0 top-full mt-1 text-left text-sm text-red-600"
+                >
+                  {joinError}
+                </p>
+              )}
             </div>
 
             <button
