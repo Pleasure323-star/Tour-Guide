@@ -4,7 +4,7 @@ import { ambassadorFormUrl } from "~/lib/env-urls";
 import { cn } from "~/lib/utils";
 
 const buttonClass =
-  "h-auto rounded-full bg-primary-500 px-4 py-2.5 text-base font-medium text-white hover:bg-primary-400 sm:px-6 sm:py-3";
+  "h-auto min-h-[46px] rounded-full bg-primary-500 px-4 py-2.5 text-base font-medium text-white duration-200 hover:bg-primary-400 sm:min-h-[50px] sm:px-6 sm:py-3";
 
 export const ApplyButton = ({ className }: { className?: string }) => {
   const formUrl = ambassadorFormUrl();
@@ -13,8 +13,11 @@ export const ApplyButton = ({ className }: { className?: string }) => {
     return (
       <Button
         disabled
-        className={cn(buttonClass, className)}
-        aria-label="Applications open soon"
+        className={cn(
+          buttonClass,
+          "disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-100",
+          className
+        )}
       >
         Applications open soon
       </Button>
@@ -27,9 +30,9 @@ export const ApplyButton = ({ className }: { className?: string }) => {
         Apply to be an ambassador
         <span
           aria-hidden="true"
-          className="flex size-6 items-center justify-center rounded-full bg-white text-primary-500"
+          className="flex size-[26px] items-center justify-center rounded-full bg-white text-primary-500"
         >
-          <ArrowRight size={14} />
+          <ArrowRight size={16} />
         </span>
       </a>
     </Button>
