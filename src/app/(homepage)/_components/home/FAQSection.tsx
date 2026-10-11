@@ -78,11 +78,12 @@ export const FAQSection = ({ faqs = homeFAQs }: FAQSectionProps) => {
             </div>
           </div>
         )}
-        {filteredFAQs.length === 0 ? (
+        {isHomepage && (
           <p role="status" className="text-sm text-neutral-600">
-            No FAQs match your search.
+            {filteredFAQs.length === 0 ? "No FAQs match your search." : ""}
           </p>
-        ) : (
+        )}
+        {filteredFAQs.length > 0 && (
           <Accordion
             type="single"
             collapsible
