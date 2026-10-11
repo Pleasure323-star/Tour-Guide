@@ -23,6 +23,38 @@ import { formatCount } from "~/utils/utils";
 // import AddColleagueDialog from "~/app/(client)/[org]/_components/colleagues/add-colleagues-modal";
 // import { ColleaguesCard } from "~/app/(client)/[org]/_components/colleagues/card";
 
+const HOME_DM_SIDEBAR_LIMIT = 12;
+const LOCAL_DM_PREVIEW_NAMES = [
+  "Amina Bello",
+  "Chidi Okafor",
+  "Damilola Adeyemi",
+  "Efe Ighodaro",
+  "Farouk Musa",
+  "Grace Nwosu",
+  "Hauwa Ibrahim",
+  "Ifeanyi Okeke",
+  "Jumoke Adebayo",
+  "Kelechi Eze",
+  "Lola Williams",
+  "Musa Abdullahi",
+  "Nneka Obi",
+];
+
+const createLocalPreviewDms = () => {
+  // Temporary visual-test data. Remove before staging this ticket for a dev PR.
+  return LOCAL_DM_PREVIEW_NAMES.map((username, index) => ({
+    channel_id: `local-home-dm-preview-${index + 1}`,
+    channel_type: "dm",
+    participant_id: `local-home-dm-preview-participant-${index + 1}`,
+    participants: [{ online: index % 2 === 0 }],
+    username,
+    avatar_url: "",
+    default_avatar_url: "",
+    preview_thread: [],
+    thread_count: 0,
+  }));
+};
+
 export default function ChannelNav({
   resizerRef,
   sidebarWidth,
@@ -33,6 +65,7 @@ export default function ChannelNav({
   const params = useParams();
   const { orgSlug } = state;
   const pathname = usePathname();
+  const [showLocalDmPreview, setShowLocalDmPreview] = useState(false);
   const onChannelPage = pathname.includes("/channels/");
   const routeChannelId = onChannelPage ? String(params.id || "") : "";
   const [pendingChannelId, setPendingChannelId] = useState<string | null>(null);
@@ -42,6 +75,13 @@ export default function ChannelNav({
       setPendingChannelId(null);
     }
   }, [pendingChannelId, routeChannelId]);
+
+  useEffect(() => {
+    // Temporary staging test toggle: ?dmPreviewMore=1. Remove before dev.
+    setShowLocalDmPreview(
+      new URLSearchParams(window.location.search).has("dmPreviewMore")
+    );
+  }, []);
 
   const selectedChannelId = onChannelPage
     ? pendingChannelId || routeChannelId
@@ -90,6 +130,13 @@ export default function ChannelNav({
 
   const channelsReady = Array.isArray(state?.channels);
   const homeDmsReady = Array.isArray(state?.homeDms);
+  const homeDms = homeDmsReady
+    ? showLocalDmPreview
+      ? createLocalPreviewDms()
+      : state.homeDms
+    : [];
+  const visibleHomeDms = homeDms.slice(0, HOME_DM_SIDEBAR_LIMIT);
+  const showAllPeople = homeDms.length > HOME_DM_SIDEBAR_LIMIT;
   const threadsReady = Array.isArray(state?.threadMentions);
   const unseenThreadCount = state?.unseenThreadCount ?? 0;
   const showThreadsBadge = unseenThreadCount > 0;
@@ -311,7 +358,7 @@ export default function ChannelNav({
                   </Tooltips>
                 </div>
                 <AccordionContent onClick={handleClose}>
-                  {state.homeDms.map((item: any, index: number) => (
+                  {visibleHomeDms.map((item: any, index: number) => (
                     <div
                       className="mb-1"
                       key={item?.channel_id || item?.channels_id || index}
@@ -320,7 +367,7 @@ export default function ChannelNav({
                     </div>
                   ))}
 
-                  {state.homeDms.length === 0 && (
+                  {visibleHomeDms.length === 0 && (
                     <p className="text-xs text-center text-blue-50">
                       No recent chats. Start a new conversation!
                     </p>
@@ -330,7 +377,7 @@ export default function ChannelNav({
             </Accordion>
           )}
 
-          {homeDmsReady && (
+          {homeDmsReady && showAllPeople && (
             <Link
               href={`/${orgSlug}/home/people`}
               className={cn(
