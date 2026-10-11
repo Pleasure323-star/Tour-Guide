@@ -7,6 +7,7 @@ import Thread from "../ChannelMessage/thread";
 import UserAvatar from "~/components/layout/user-avatar";
 import { Pin } from "lucide-react";
 import MessageItem from "../ChannelMessage/message-item";
+import MessageAuthor from "../ChannelMessage/message-author";
 import { GetRequest, PutRequest } from "~/utils/new-request";
 import { ACTIONS } from "~/store/Actions";
 import { useParams, useSearchParams } from "next/navigation";
@@ -190,6 +191,10 @@ const ReplyMessage = ({ fetchMoreData, hasMore }: any) => {
                     </span>
 
                     <span className="text-xs text-[#98A2B3]">
+                  <div className="flex w-full min-w-0 items-center gap-2">
+                    <MessageAuthor item={thread} />
+
+                    <span className="shrink-0 text-xs text-[#98A2B3]">
                       {new Date(thread?.created_at).toLocaleTimeString([], {
                         hour: "numeric",
                         minute: "2-digit",
