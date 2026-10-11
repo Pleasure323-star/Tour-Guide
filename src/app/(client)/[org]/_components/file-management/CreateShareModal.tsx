@@ -115,8 +115,16 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
   }, [debouncedInput, state?.orgId]);
 
   const addRecipient = (recipient: Recipient) => {
-    if (!recipients.some((r) => r.key === recipient.key)) {
+    const email = recipient.email?.toLowerCase();
+    const existing = recipients.findIndex(
+      (r) =>
+        r.key === recipient.key || (!!email && r.email?.toLowerCase() === email)
+    );
+    if (existing === -1) {
       setRecipients([...recipients, recipient]);
+    } else if (recipient.userId && !recipients[existing].userId) {
+      // The same address as a member replaces the email-only recipient.
+      setRecipients(recipients.map((r, i) => (i === existing ? recipient : r)));
     }
     setEmailInput("");
     setSuggestions([]);
@@ -144,6 +152,9 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
   };
 
   const handleEmailKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    // Enter can confirm an IME candidate; it must not add a recipient then.
+    if (e.nativeEvent.isComposing) return;
+
     if (e.key === "ArrowDown" && availableSuggestions.length > 0) {
       e.preventDefault();
       setActiveIndex((i) => (i + 1) % availableSuggestions.length);
@@ -304,12 +315,12 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
                     setEmailInput(e.target.value);
                     setRecipientError("");
                     setActiveIndex(-1);
+                    // Old results belong to the previous query.
+                    setSuggestions([]);
                   }}
                   onKeyDown={handleEmailKeyDown}
                   onBlur={() => {
-                    if (emailSchema.safeParse(emailInput.trim()).success) {
-                      addTypedEmail();
-                    }
+                    if (emailInput.trim()) addTypedEmail();
                   }}
                   placeholder={
                     recipients.length === 0 ? "Add people to send link to" : ""
