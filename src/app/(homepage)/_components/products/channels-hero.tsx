@@ -146,21 +146,27 @@ export const ChannelsHero = () => {
                 />
               </Link>
             </Button>
-            {/* No demo video exists yet; this button is intentionally inert until one does. */}
+            {/* No demo video exists yet; per the design handoff, the demo CTA goes to Contact Sales until one does. */}
             <Button
-              type="button"
+              asChild
               className={cn(
                 "h-auto gap-2.5 rounded-full border border-[#D6D6F5] bg-white px-6 py-[17px] text-base font-bold text-[#1F2530] hover:bg-[#EEF0FF]",
                 focusRing
               )}
             >
-              <span
-                className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#EEF0FF] text-primary-500"
-                aria-hidden="true"
-              >
-                <Play className="h-3 w-3" fill="currentColor" strokeWidth={0} />
-              </span>
-              Watch a 2-min demo
+              <Link href="/contact-sales">
+                <span
+                  className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-[#EEF0FF] text-primary-500"
+                  aria-hidden="true"
+                >
+                  <Play
+                    className="h-3 w-3"
+                    fill="currentColor"
+                    strokeWidth={0}
+                  />
+                </span>
+                Watch a 2-min demo
+              </Link>
             </Button>
           </div>
 
