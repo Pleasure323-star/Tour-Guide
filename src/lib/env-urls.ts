@@ -19,9 +19,7 @@ export function contactSalesUrl(): string {
 }
 
 export function ambassadorFormUrl(): string {
-  const url = readEnv("NEXT_PUBLIC_AMBASSADOR_FORM_URL");
-  // "#" is the env.example placeholder: treat it as not set.
-  return url === "#" ? "" : url;
+  return readEnv("NEXT_PUBLIC_AMBASSADOR_FORM_URL");
 }
 
 export function appStoreUrl(): string {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { Check } from "lucide-react";
 import { ogImageUrl, siteUrl } from "~/lib/env-urls";
-import { OutlineBtn } from "~/app/(homepage)/_components/ui/Button";
 import { WhyCard } from "~/app/(homepage)/_components/ui/WhyCard";
 import { ApplyButton } from "~/app/(homepage)/_components/ambassadors/apply-button";
 import {
@@ -109,6 +109,8 @@ const sectionClass =
   "relative isolate space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16";
 const headingClass =
   "text-center text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] lg:leading-[1.12]";
+const outlineLinkClass =
+  "rounded-full border border-primary-500 px-4 py-2.5 font-medium text-blue-100 transition-colors duration-100 ease-in hover:bg-primary-500 hover:text-white sm:px-6 sm:py-3";
 const subheadingClass =
   "max-w-[95%] text-xs text-neutral-600 sm:max-w-[90%] sm:text-base md:max-w-[65%] lg:max-w-[45%] lg:text-lg";
 
@@ -132,7 +134,9 @@ const AmbassadorsPage = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
               <ApplyButton />
-              <OutlineBtn text="How it works" href="#how-it-works" />
+              <Link href="#how-it-works" className={outlineLinkClass}>
+                How it works
+              </Link>
             </div>
           </div>
 
@@ -253,7 +257,9 @@ const AmbassadorsPage = () => {
         </p>
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-2">
           <ApplyButton />
-          <OutlineBtn text="Read our Privacy Policy" href="/policy" />
+          <Link href="/policy" className={outlineLinkClass}>
+            Read our Privacy Policy
+          </Link>
         </div>
       </section>
     </>
