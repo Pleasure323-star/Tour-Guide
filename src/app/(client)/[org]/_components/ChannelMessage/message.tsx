@@ -251,16 +251,17 @@ const Message = ({
       <div className="w-full">
         {shouldShowAvatar && (
           <div className="flex min-w-0 items-center gap-2">
-            <MessageAuthor item={item} onClick={handleOpen} />
+            
+<MessageAuthor item={item} onClick={handleOpen} />
 
-            <span className="text-xs text-[#98A2B3] mt-[1px]">
-            <span className="mt-[1px] shrink-0 text-xs text-[#98A2B3]">
-              {new Date(item?.created_at).toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </span>
+<span className="mt-[1px] shrink-0 text-xs text-[#98A2B3]">
+  {new Date(item?.created_at).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  })}
+</span>
+
           </div>
         )}
 
