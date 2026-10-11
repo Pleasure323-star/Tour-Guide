@@ -52,8 +52,13 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
   const [copyError, setCopyError] = useState<string | null>(null);
   const [showSelectCanView, setShowSelectCanView] = useState(false);
   const copyResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyAttemptRef = useRef(0);
+  const activeLinkRef = useRef<string | null>(null);
 
   useEffect(() => {
+    activeLinkRef.current = fileToShare?.file_link?.trim() ?? null;
+    // Invalidate any in-flight copy so its completion can't restore feedback.
+    copyAttemptRef.current += 1;
     setIsCopied(false);
     setCopyError(null);
     if (copyResetTimer.current) {
@@ -143,15 +148,22 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
       setIsCopied(false);
       return;
     }
+    const attemptId = ++copyAttemptRef.current;
+    // Ignore results from earlier attempts so a stale completion can neither
+    // overwrite newer feedback nor restore it after the file/link changes.
+    const isStale = () =>
+      copyAttemptRef.current !== attemptId || activeLinkRef.current !== link;
     try {
       setCopyError(null);
       await copyTextToClipboard(link);
+      if (isStale()) return;
       setIsCopied(true);
       if (copyResetTimer.current) {
         clearTimeout(copyResetTimer.current);
       }
       copyResetTimer.current = setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
+      if (isStale()) return;
       console.error("Failed to copy link:", err);
       setIsCopied(false);
       setCopyError("Couldn't copy the link. Please try again.");
