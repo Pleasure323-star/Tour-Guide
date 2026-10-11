@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, KeyboardEvent as ReactKeyboardEvent } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import {
   Dialog,
   DialogContent,
@@ -44,7 +49,26 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
   const [message, setMessage] = useState("");
   const [accessType, setAccessType] = useState<AccessType>("Restricted");
   const [isCopied, setIsCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
   const [showSelectCanView, setShowSelectCanView] = useState(false);
+  const copyResetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setIsCopied(false);
+    setCopyError(null);
+    if (copyResetTimer.current) {
+      clearTimeout(copyResetTimer.current);
+      copyResetTimer.current = null;
+    }
+  }, [fileToShare?.file_link]);
+
+  useEffect(() => {
+    return () => {
+      if (copyResetTimer.current) {
+        clearTimeout(copyResetTimer.current);
+      }
+    };
+  }, []);
 
   const handleEmailKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
@@ -90,12 +114,44 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     setShowSelectCanView(false);
   };
 
+  const copyTextToClipboard = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+    document.body.appendChild(textArea);
+    textArea.select();
+    const succeeded = document.execCommand("copy");
+    document.body.removeChild(textArea);
+    if (!succeeded) {
+      throw new Error("Copy command failed");
+    }
+  };
+
   const handleCopyLink = async () => {
+    const link = fileToShare?.file_link?.trim();
+    if (!link) {
+      setCopyError("No file link available to copy.");
+      setIsCopied(false);
+      return;
+    }
     try {
+      setCopyError(null);
+      await copyTextToClipboard(link);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      if (copyResetTimer.current) {
+        clearTimeout(copyResetTimer.current);
+      }
+      copyResetTimer.current = setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy link:", err);
+      setIsCopied(false);
+      setCopyError("Couldn't copy the link. Please try again.");
     }
   };
 
@@ -306,6 +362,15 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
           <div className="absolute text-[16px] left-1/2 right-1/2 transform -translate-x-1/2 flex w-1/2 rounded-lg items-center px-4 py-2 justify-between text-white bottom-0 bg-[#1C1C1C]">
             <span className="">Link copied</span>
             <Check />
+          </div>
+        )}
+        {copyError && (
+          <div
+            role="alert"
+            className="absolute text-[14px] left-1/2 right-1/2 transform -translate-x-1/2 flex w-1/2 rounded-lg items-center px-4 py-2 justify-between text-white bottom-0 bg-[#B42318]"
+          >
+            <span className="">{copyError}</span>
+            <X width={16} height={16} />
           </div>
         )}
       </DialogContent>
