@@ -30,6 +30,7 @@ import {
 import { TooltipArrow } from "@radix-ui/react-tooltip";
 import moment from "moment";
 import { formatReactionUsers } from "~/utils/format-reaction-users";
+import MessageAuthor from "./message-author";
 
 const ReplyMessages = ({
   item,
@@ -196,15 +197,14 @@ const ReplyMessages = ({
 
       <div className="min-w-0 flex-1">
         {shouldShowAvatar && (
-          <div className="flex items-center gap-2">
-            <span
-              className="cursor-pointer text-[15px] font-bold text-[#1D2939] hover:underline"
+          <div className="flex min-w-0 items-center gap-2">
+            <MessageAuthor
+              item={item}
               onClick={handleOpen}
-            >
-              {item?.username || item?.email}
-            </span>
+              nameClassName="hover:underline"
+            />
 
-            <span className="text-xs text-[#98A2B3]">
+            <span className="shrink-0 text-xs text-[#98A2B3]">
               {moment(item?.created_at).format("MMMM Do [at] h:mm A")}
             </span>
           </div>
