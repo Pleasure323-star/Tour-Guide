@@ -69,6 +69,11 @@ const supportLinks: FooterLink[] = [
     label: "Contact Us",
     href: "/contact-sales",
   },
+  {
+    id: 4,
+    label: "Ambassadors",
+    href: "/ambassadors",
+  },
 ];
 
 const resourcesLinks: FooterLink[] = [
