@@ -27,6 +27,7 @@ type PricingComparisonTableProps = {
   rowInfoIcon?: ReactNode;
   featureColumnLabel?: string;
   className?: string;
+  compact?: boolean;
 };
 
 const renderCellValue = (value: PricingComparisonCellValue) => {
@@ -74,6 +75,7 @@ export const PricingComparisonTable = ({
   sectionTitleIcon,
   rowInfoIcon,
   className,
+  compact = false,
 }: PricingComparisonTableProps) => {
   return (
     <div className={cn("w-full max-w-7xl text-left no-scrollbar", className)}>
@@ -86,11 +88,21 @@ export const PricingComparisonTable = ({
         </div>
       ) : null}
 
-      <Table className="min-w-[680px] table-fixed sm:min-w-[760px]">
+      <Table
+        className={cn(
+          "table-fixed",
+          compact ? "w-full min-w-0" : "min-w-[680px] sm:min-w-[760px]"
+        )}
+      >
         <colgroup>
-          <col className="w-[40%]" />
+          <col className={compact ? "w-[72%]" : "w-[40%]"} />
           {plans.map((plan) => (
-            <col key={plan.key} style={{ width: `${60 / plans.length}%` }} />
+            <col
+              key={plan.key}
+              style={{
+                width: compact ? "28%" : `${60 / plans.length}%`,
+              }}
+            />
           ))}
         </colgroup>
 
@@ -128,7 +140,8 @@ export const PricingComparisonTable = ({
               >
                 <TableCell
                   className={cn(
-                    "border-r border-neutral-200 px-4 py-3 text-sm text-neutral-700",
+                    "border-r border-neutral-200 py-3 text-sm text-neutral-700",
+                    compact ? "px-3" : "px-4",
                     isLastRow && "!border-b !border-neutral-200"
                   )}
                 >
@@ -146,7 +159,8 @@ export const PricingComparisonTable = ({
                   <TableCell
                     key={`${row.key}-${plan.key}`}
                     className={cn(
-                      "border-r border-neutral-200 px-4 py-3 text-center last:border-r-0",
+                      "border-r border-neutral-200 py-3 text-center last:border-r-0",
+                      compact ? "px-3" : "px-4",
                       isLastRow && "!border-b !border-neutral-200"
                     )}
                   >

@@ -10,6 +10,7 @@ import {
   pricingComparisonPlans,
 } from "../_lib/pricingComparisonData";
 import { CircleHelp } from "lucide-react";
+import { MobilePricingComparison } from "../_components/pricing/MobilePricingComparison";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -66,47 +67,51 @@ const PricingPage = () => {
       <PricingSection showSubtitle />
 
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12 space-y-6 relative">
-        <div className="no-scrollbar">
-          <Table className="min-w-[680px] table-fixed sm:min-w-[760px] no-scrollbar">
-            <colgroup>
-              <col className="w-[40%]" />
-              {pricingComparisonPlans.map((plan) => (
-                <col
-                  key={plan.key}
-                  style={{ width: `${60 / pricingComparisonPlans.length}%` }}
-                />
-              ))}
-            </colgroup>
+        <MobilePricingComparison />
 
-            <TableHeader>
-              <TableRow className="border-b border-neutral-200 hover:bg-transparent no-scrollbar">
-                <TableHead className="border-r border-neutral-200 px-4 py-3 text-left text-sm font-semibold text-neutral-700">
-                  Plan Features
-                </TableHead>
+        <div className="hidden md:block">
+          <div className="no-scrollbar">
+            <Table className="min-w-[680px] table-fixed sm:min-w-[760px] no-scrollbar">
+              <colgroup>
+                <col className="w-[40%]" />
                 {pricingComparisonPlans.map((plan) => (
-                  <TableHead
+                  <col
                     key={plan.key}
-                    className="border-r border-neutral-200 px-4 py-3 text-center text-sm font-semibold text-neutral-900 last:border-r-0"
-                  >
-                    {plan.label}
-                  </TableHead>
+                    style={{ width: `${60 / pricingComparisonPlans.length}%` }}
+                  />
                 ))}
-              </TableRow>
-            </TableHeader>
-          </Table>
-        </div>
+              </colgroup>
 
-        {pricingComparisonDemoSections.map((section) => (
-          <PricingComparisonTable
-            key={section.key}
-            plans={pricingComparisonPlans}
-            section={section}
-            rowInfoIcon={
-              <CircleHelp className="h-3.5 w-3.5 text-neutral-400" />
-            }
-            className="mb-8 last:mb-0"
-          />
-        ))}
+              <TableHeader>
+                <TableRow className="border-b border-neutral-200 hover:bg-transparent no-scrollbar">
+                  <TableHead className="border-r border-neutral-200 px-4 py-3 text-left text-sm font-semibold text-neutral-700">
+                    Plan Features
+                  </TableHead>
+                  {pricingComparisonPlans.map((plan) => (
+                    <TableHead
+                      key={plan.key}
+                      className="border-r border-neutral-200 px-4 py-3 text-center text-sm font-semibold text-neutral-900 last:border-r-0"
+                    >
+                      {plan.label}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+            </Table>
+          </div>
+
+          {pricingComparisonDemoSections.map((section) => (
+            <PricingComparisonTable
+              key={section.key}
+              plans={pricingComparisonPlans}
+              section={section}
+              rowInfoIcon={
+                <CircleHelp className="h-3.5 w-3.5 text-neutral-400" />
+              }
+              className="mb-8 last:mb-0"
+            />
+          ))}
+        </div>
       </div>
       <FAQSection />
       <DynamicFooter
