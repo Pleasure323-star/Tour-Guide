@@ -207,7 +207,7 @@ const contributors: Contributor[] = [
     workspaceEmail: "odetolababs@gmail.com",
     gitHubEmail: "sirfunsho",
     role: "member",
-    hobbies: [],
+    hobbies: ["Reading", "Music", "Learning", "Travelling"],
   },
   {
     id: "20",
@@ -919,6 +919,15 @@ const contributors: Contributor[] = [
     gitHubEmail: "chinenyeonwuzulike99@gmail.com",
     role: "member",
     hobbies: ["Travelling", "Reading", "Hiking"],
+  },
+  {
+    id: "99",
+    name: "David Ariwi",
+    username: "DavidArondi",
+    workspaceEmail: "davieariwi@gmail.com",
+    gitHubEmail: "davieariwi@gmail.com",
+    role: "member",
+    hobbies: ["driving", "playing football", "travelling"],
   },
 ];
 

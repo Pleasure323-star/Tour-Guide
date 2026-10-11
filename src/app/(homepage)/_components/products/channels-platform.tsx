@@ -42,7 +42,7 @@ const products: {
   {
     name: "Assignments",
     // Reused from the File Management page until product confirms final copy.
-    desc: "Attach files to coursework and project submissions.",
+    desc: "Create assignments and manage student submissions.",
     icon: ClipboardCheck,
     iconClass: "bg-[#FFF1DD] text-[#9A5800]",
   },
