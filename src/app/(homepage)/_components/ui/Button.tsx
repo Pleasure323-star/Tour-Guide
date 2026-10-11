@@ -66,22 +66,6 @@ export const ArrowBtn = ({
 
   if (linkToHome) href = token ? `/${orgSlug}` : "/auth/sign-up";
 
-  return (
-    <Link href={href || "#"}>
-      <button
-        onClick={onClick}
-        className={cn(
-          "group bg-primary-500 text-white px-4 py-2.5 sm:px-6 sm:py-3 font-medium rounded-full flex items-center gap-3 transition-colors duration-200 hover:bg-primary-400",
-          className
-        )}
-      >
-        {token && loggedInText ? loggedInText : text}
-        {!hideArrow && (
-          <div
-            className={cn(
-              "transition-transform duration-300 ease-out group-hover:translate-x-1",
-              inverted && "order-first"
-            )}
   const buttonContent = (
     <button
       onClick={disabled ? undefined : onClick}
@@ -94,7 +78,7 @@ export const ArrowBtn = ({
         className
       )}
     >
-      {text}
+      {token && loggedInText ? loggedInText : text}
       {!hideArrow && (
         <div
           className={cn(

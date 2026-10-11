@@ -185,12 +185,6 @@ const ReplyMessage = ({ fetchMoreData, hasMore }: any) => {
                 />
 
                 <div>
-                  <div className="w-full flex items-center gap-2">
-                    <span className="font-bold text-[15px] text-[#1D2939]">
-                      {thread?.username || thread?.email}
-                    </span>
-
-                    <span className="text-xs text-[#98A2B3]">
                   <div className="flex w-full min-w-0 items-center gap-2">
                     <MessageAuthor item={thread} />
 
