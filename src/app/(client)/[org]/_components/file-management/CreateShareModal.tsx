@@ -66,7 +66,10 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     return () => {
       if (copyResetTimer.current) {
         clearTimeout(copyResetTimer.current);
+        copyResetTimer.current = null;
       }
+      setCopyError(null);
+      setIsCopied(false);
     };
   }, []);
 
