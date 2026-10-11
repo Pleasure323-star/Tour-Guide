@@ -8,6 +8,8 @@ import {
   ShareIcon,
 } from "../../_components/svgs";
 import { MessagesIcon } from "../../_components/svgs";
+import { ChannelsScale } from "../../_components/products/channels-scale";
+import { ChannelsPlatform } from "../../_components/products/channels-platform";
 import { FAQSection } from "../../_components/home/FAQSection";
 import { DynamicFooter } from "../../_components/footer/dynamic-footer";
 import type { HomeFAQ } from "../../_lib/faqData";
@@ -85,30 +87,6 @@ const featuresData = [
     icon: MessagesQuestionIcon,
     desc: "From small classrooms to large university programs, channels are designed to support structured discussions for every type of learning. ",
     image: "/images/homepage/products/features/feature-4.png",
-  },
-];
-
-const otherFeatures = [
-  {
-    title: "Buzz",
-    description: "Instant voice conversations inside channels.",
-    icon: "/images/homepage/icons/buzz.png",
-  },
-  {
-    title: "File Management",
-    description: "Share and organize learning materials and resources.",
-    icon: "/images/homepage/icons/file-management.png",
-  },
-  {
-    icon: "/images/homepage/icons/AI-class-note.png",
-    title: "Ai Agents",
-    description:
-      "AI assistants that summarize discussions and answer questions.",
-  },
-  {
-    icon: "/images/homepage/icons/whiteboard.png",
-    title: "Assignments",
-    description: "Share and organize learning materials and resources.",
   },
 ];
 
@@ -222,67 +200,8 @@ const ChannelProductPage = () => {
           <ArrowBtn text="Get Started" href="/auth/sign-up" />
         </div>
       </section>
-      <section className="relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16 mt-5">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] text-center lg:leading-[1.12]">
-            Channels that <span className="text-primary-500">Scale</span> with
-            Your Institution
-          </h1>
-          <p className="max-w-[95%] text-center text-xs text-neutral-600 sm:max-w-[90%] sm:text-base md:max-w-[65%] lg:max-w-[45%] lg:text-lg">
-            Whether you're managing a classroom or an entire university
-            community, Zedu channels help structure conversations across large
-            groups.
-          </p>
-        </div>
-        <div className="relative z-10 mx-auto h-[220px] w-full max-w-5xl overflow-hidden rounded-2xl bg-[#eef0ff] sm:h-[260px] sm:rounded-3xl lg:h-[300px]">
-          <div className="relative h-full w-full ">
-            <Image
-              src="/images/homepage/products/zedu-showcase.png"
-              alt="A showcase of Zedu channels presented by a student"
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 96vw, 980px"
-              className="object-contain object-center"
-            />
-          </div>
-        </div>
-        <div className="mx-auto flex items-center justify-center pt-2 sm:pt-4">
-          <ArrowBtn text="Start Now" href="/auth/sign-up" />
-        </div>
-      </section>
-      <section className="relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16 mt-5 bg-blue-50/30">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] text-center lg:leading-[1.12]">
-            More That Just <span className="text-primary-500">Channels</span>
-          </h1>
-          <p className="max-w-[95%] text-center text-xs text-neutral-600 sm:max-w-[90%] sm:text-base md:max-w-[65%] lg:max-w-[45%] lg:text-lg">
-            Channels work together with the rest of the Zedu platform.
-          </p>
-        </div>
-
-        <div className="grid max-w-7xl mx-auto gap-3 grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-          {otherFeatures.map((feature) => (
-            <div
-              key={feature.title}
-              className="flex h-full flex-col justify-center gap-3 rounded-2xl bg-white p-4 sm:gap-4 sm:rounded-3xl sm:p-6"
-            >
-              <Image
-                src={feature.icon}
-                alt={`${feature.title} icon`}
-                height={40}
-                width={40}
-                preload
-                className="h-8 w-8 sm:h-10 sm:w-10"
-              />
-              <h3 className="text-base font-semibold text-neutral-900 sm:text-lg">
-                {feature.title}
-              </h3>
-              <p className="text-xs leading-relaxed text-neutral-600 sm:text-sm">
-                {feature.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ChannelsScale />
+      <ChannelsPlatform />
 
       <FAQSection faqs={channelsFAQs} />
       <DynamicFooter
