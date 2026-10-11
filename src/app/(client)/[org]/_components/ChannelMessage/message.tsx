@@ -239,13 +239,11 @@ const Message = ({
           </>
         ) : (
           <span className="block text-xs w-[36px] text-[#98A2B3] mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            {new Date(item?.created_at)
-              .toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(/\s?(am|pm)/i, "")}
+            {new Date(item?.created_at).toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            })}
           </span>
         )}
       </div>
@@ -256,13 +254,11 @@ const Message = ({
             <MessageAuthor item={item} onClick={handleOpen} />
 
             <span className="mt-[1px] shrink-0 text-xs text-[#98A2B3]">
-              {new Date(item?.created_at)
-                .toLocaleTimeString([], {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true,
-                })
-                .replace(/\s?(am|pm)/i, "")}
+              {new Date(item?.created_at).toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              })}
             </span>
           </div>
         )}
