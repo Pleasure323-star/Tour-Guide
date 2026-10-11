@@ -251,7 +251,10 @@ const AmbassadorsPage = () => {
           Tell us about your class, bootcamp or community and we will get in
           touch.
         </p>
-        <ApplyButton />
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-2">
+          <ApplyButton />
+          <OutlineBtn text="Read our Privacy Policy" href="/policy" />
+        </div>
       </section>
     </>
   );
