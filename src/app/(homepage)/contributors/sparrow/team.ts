@@ -100,5 +100,12 @@ export const TEAM: Team = {
       role: "Member",
       field: "Frontend Development",
     },
+    {
+      fullName: "Obidigwe Francis Praise Chukwunonso",
+      zeduUsername: "Francis-7-tech",
+      githubUsername: "francis-7-tech",
+      role: "Member",
+      field: "Fullstack Development",
+    },
   ],
 };
