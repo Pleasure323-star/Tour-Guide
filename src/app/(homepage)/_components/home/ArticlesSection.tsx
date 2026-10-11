@@ -6,18 +6,24 @@ const mockArticles = [
     desc: "Run each cohort with clear channels, weekly goals, assignment checkpoints, and mentor feedback loops so learners stay accountable from onboarding to graduation.",
     tag: "Modern Bootcamp",
     image: "/images/homepage/articles/article-1.png",
+    details:
+      "Accelerate your cohort's learning journey with structured channels, automated assignment check-ins, and direct mentor feedback loops. Zedu ensures learners stay engaged from day one through graduation.",
   },
   {
     title: "A Better Campus Communication Layer for Institutions",
     desc: "Coordinate departments, faculty, and students in one structured workspace with role-based permissions, academic announcements, and reliable resource sharing.",
     tag: "Educational Institution",
     image: "/images/homepage/articles/article-2.png",
+    details:
+      "Unify department updates, faculty communication, and student channels in a secure workspace. Manage permissions, centralize announcements, and share resources reliably across your entire institution.",
   },
   {
     title: "Keeping K-12 Classrooms Organized, Safe, and Engaging",
     desc: "Create teacher-managed class spaces where students can ask questions, access lesson materials, submit work, and collaborate in a focused learning environment.",
     tag: "K-12 Platform",
     image: "/images/homepage/articles/article-3.png",
+    details:
+      "Create safe, teacher-moderated spaces designed for young learners. Easily post lesson materials, manage class Q&A, and facilitate student collaboration in a distraction-free digital classroom.",
   },
 ];
 
@@ -47,6 +53,7 @@ export const ArticlesSection = () => {
               desc={article.desc}
               tag={article.tag}
               image={article.image}
+              details={article.details}
             />
           </div>
         ))}
