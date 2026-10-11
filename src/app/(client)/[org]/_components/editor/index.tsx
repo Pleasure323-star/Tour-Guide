@@ -806,6 +806,81 @@ const UseTextEditor = (
           }
         }
 
+        const pastedText = event.clipboardData?.getData("text/plain")?.trim();
+        if (pastedText && /^https?:\/\/[^\s]+$/i.test(pastedText)) {
+          let isValid = false;
+          try {
+            const parsed = new URL(pastedText);
+            isValid =
+              parsed.protocol === "http:" || parsed.protocol === "https:";
+          } catch {
+            isValid = false;
+          }
+
+          if (isValid) {
+            const { state } = view;
+            const { empty } = state.selection;
+
+            // If text is already highlighted, let TipTap attach the link to the selected text
+            if (!empty) {
+              return false;
+            }
+
+            const url = pastedText;
+            const { tr, schema } = state;
+            const linkMark = schema.marks.link?.create({ href: url });
+            const textNode = schema.text(url, linkMark ? [linkMark] : []);
+            const spaceNode = schema.text(" ");
+
+            tr.replaceSelectionWith(textNode, false);
+            tr.insert(tr.selection.to, spaceNode);
+            view.dispatch(tr);
+
+            // Fetch metadata to auto-embed with page title
+            void fetch(`/api/link-preview?url=${encodeURIComponent(url)}`)
+              .then((res) => (res.ok ? res.json() : null))
+              .then((data) => {
+                const rawTitle = data?.title?.trim();
+                if (rawTitle && rawTitle !== "No Title" && rawTitle !== url) {
+                  let targetRange: { from: number; to: number } | null = null;
+                  view.state.doc.descendants((node, pos) => {
+                    if (targetRange) return false;
+                    if (node.isText && node.text === url) {
+                      const hasLink = node.marks.some(
+                        (m) => m.type.name === "link" && m.attrs.href === url
+                      );
+                      if (hasLink) {
+                        targetRange = { from: pos, to: pos + node.nodeSize };
+                        return false;
+                      }
+                    }
+                  });
+
+                  const range = targetRange as {
+                    from: number;
+                    to: number;
+                  } | null;
+
+                  if (range) {
+                    const updateTr = view.state.tr;
+                    const newLinkMark = view.state.schema.marks.link?.create({
+                      href: url,
+                    });
+                    const newTextNode = view.state.schema.text(
+                      rawTitle,
+                      newLinkMark ? [newLinkMark] : []
+                    );
+                    updateTr.replaceWith(range.from, range.to, newTextNode);
+                    view.dispatch(updateTr);
+                  }
+                }
+              })
+              .catch(() => {});
+
+            return true;
+          }
+        }
+
         return false;
       },
     },
