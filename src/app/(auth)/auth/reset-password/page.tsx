@@ -283,18 +283,21 @@ function ResetPassword() {
             <div className="flex flex-col items-center mt-3">
               <p className="text-xs text-gray-500">
                 {timeLeft <= 0 ? (
-                  <span
-                    className="cursor-pointer text-underline"
+                  <button
+                    type="button"
+                    className="cursor-pointer underline"
                     onClick={handleResend}
                   >
                     Resend code
-                  </span>
+                  </button>
                 ) : (
-                  <span className="cursor-disabled">Resend code after</span>
-                )}{" "}
-                <span className="text-[#7141F8]">
-                  {formatTime(timeLeft)} secs
-                </span>
+                  <>
+                    <span className="cursor-disabled">Resend code after</span>{" "}
+                    <span className="text-[#7141F8]">
+                      {formatTime(timeLeft)} secs
+                    </span>
+                  </>
+                )}
               </p>
             </div>
           </form>
