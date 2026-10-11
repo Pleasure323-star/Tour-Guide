@@ -53,7 +53,7 @@ export const TEAM: Team = {
     },
     {
       fullName: "Victor Adeshile",
-      zeduUsername: "Victor Adeshile",
+      zeduUsername: "victor_adeshile",
       githubUsername: "davik4life",
       role: "Member",
       field: "Full-Stack Software Engineer",
@@ -94,6 +94,20 @@ export const TEAM: Team = {
       field: "Product Management",
     },
     {
+      fullName: "Hafeezah Kadiri",
+      zeduUsername: "Hafeey",
+      githubUsername: "HAFEEZAH029",
+      role: "Member",
+      field: "Frontend Developer",
+    },
+    {
+      fullName: "Joshua Emmanuel",
+      zeduUsername: "joshua_emmanuel",
+      githubUsername: "joshua-emmanuel",
+      role: "Member",
+      field: "Frontend Developer",
+    },
+    {
       fullName: "Uyanwanne Emmanuel Chukwudaru",
       zeduUsername: "emmyanzo",
       githubUsername: "emmyanzx",
@@ -113,6 +127,13 @@ export const TEAM: Team = {
       githubUsername: "Edacynthia",
       role: "Member",
       field: "Backend Developer",
+    },
+    {
+      fullName: "Ejike Odoh",
+      zeduUsername: "ejike",
+      githubUsername: "EjikeOdoh",
+      role: "Member",
+      field: "Frontend Developer",
     },
   ],
 };
