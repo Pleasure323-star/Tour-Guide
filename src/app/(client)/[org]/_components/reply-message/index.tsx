@@ -190,18 +190,23 @@ const ReplyMessage = ({ fetchMoreData, hasMore }: any) => {
                       {thread?.username || thread?.email}
                     </span>
 
-                    <span className="text-xs text-[#98A2B3]">
-                  <div className="flex w-full min-w-0 items-center gap-2">
-                    <MessageAuthor item={thread} />
+                    
+<span className="font-bold text-[15px] text-[#1D2939]">
+  {thread?.username || thread?.email}
+</span>
 
-                    <span className="shrink-0 text-xs text-[#98A2B3]">
-                      {new Date(thread?.created_at).toLocaleTimeString([], {
-                        hour: "numeric",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </span>
-                  </div>
+<div className="flex w-full min-w-0 items-center gap-2">
+  <MessageAuthor item={thread} />
+
+  <span className="shrink-0 text-xs text-[#98A2B3]">
+    {new Date(thread?.created_at).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })}
+  </span>
+</div>
+
 
                   <div className="relative flex items-start justify-between">
                     <div className="flex items-center gap-2">
