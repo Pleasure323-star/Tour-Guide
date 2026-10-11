@@ -3,12 +3,7 @@ import { ogImageUrl, siteUrl } from "~/lib/env-urls";
 import Image from "next/image";
 import { ArrowBtn } from "../../_components/ui/Button";
 import { ChannelsHero } from "../../_components/products/channels-hero";
-import {
-  FilesIcon,
-  MessagesQuestionIcon,
-  ShareIcon,
-} from "../../_components/svgs";
-import { MessagesIcon } from "../../_components/svgs";
+import { ChannelsFeatures } from "../../_components/products/channels-features";
 import { FAQSection } from "../../_components/home/FAQSection";
 import { DynamicFooter } from "../../_components/footer/dynamic-footer";
 import type { HomeFAQ } from "../../_lib/faqData";
@@ -61,33 +56,6 @@ export const metadata: Metadata = {
     follow: true,
   },
 };
-
-const featuresData = [
-  {
-    title: "Keep conversations in the right place",
-    icon: FilesIcon,
-    desc: "Channels help organize conversations so students and educators can easily follow discussions related to specific subjects, classes, projects, or departments.",
-    image: "/images/homepage/products/features/feature-1.png",
-  },
-  {
-    title: "Follow discussions without noise",
-    icon: MessagesIcon,
-    desc: "Threaded replies allow users to respond directly to specific messages, keeping discussions organized and easy to follow. ",
-    image: "/images/homepage/products/features/feature-2.png",
-  },
-  {
-    title: "Share important updates clearly",
-    icon: ShareIcon,
-    desc: "Professors, teachers, and mentors can send announcements directly within the relevant channels.",
-    image: "/images/homepage/products/features/feature-3.png",
-  },
-  {
-    title: "Channels built for education",
-    icon: MessagesQuestionIcon,
-    desc: "From small classrooms to large university programs, channels are designed to support structured discussions for every type of learning. ",
-    image: "/images/homepage/products/features/feature-4.png",
-  },
-];
 
 const otherFeatures = [
   {
@@ -144,51 +112,7 @@ const ChannelProductPage = () => {
   return (
     <>
       <ChannelsHero />
-      <section className="relative isolate overflow-visible space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16 mt-5">
-        <div>
-          <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] text-center lg:leading-[1.12]">
-            Organized Communication for Learning{" "}
-          </h1>
-        </div>
-        <div className="mx-auto grid w-full place-items-center max-w-7xl grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-8">
-          {featuresData.map((feature) => {
-            const Icon = feature.icon;
-
-            return (
-              <article
-                key={feature.title}
-                className="flex h-full w-full max-w-[560px] flex-col gap-5 rounded-2xl bg-blue-50/10 p-4 sm:p-6 lg:p-8"
-              >
-                <div className="flex flex-col gap-3 text-left">
-                  <div className="flex h-10 w-10 items-center">
-                    <Icon />
-                  </div>
-                  <h2 className="text-lg font-semibold leading-snug text-[#1f2530] sm:text-xl">
-                    {feature.title}
-                  </h2>
-                  <p className="text-sm leading-relaxed text-[#5a6170] sm:text-base">
-                    {feature.desc}
-                  </p>
-                </div>
-                <div className="relative mx-auto w-full max-w-[420px] overflow-hidden rounded-2xl md:mx-0 md:max-w-none">
-                  <div className="relative aspect-[4/3] w-full">
-                    <Image
-                      src={feature.image}
-                      alt={feature.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 48vw, 560px"
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-        <div className="mx-auto flex items-center justify-center">
-          <ArrowBtn text="Get Started" href="/auth/sign-up" />
-        </div>
-      </section>
+      <ChannelsFeatures />
       <section className="relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16 mt-5">
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] text-center lg:leading-[1.12]">
