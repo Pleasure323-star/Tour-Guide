@@ -56,6 +56,11 @@ const solutionLinks: FooterLink[] = [
     label: "Universities",
     href: "/solutions/universities",
   },
+  {
+    id: 3,
+    label: "Cohort Programs",
+    href: "/for/cohort-based-programs",
+  },
 ];
 
 const supportLinks: FooterLink[] = [
