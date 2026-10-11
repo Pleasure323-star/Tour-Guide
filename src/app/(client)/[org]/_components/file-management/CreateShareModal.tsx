@@ -197,16 +197,23 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     }
 
     setIsSending(true);
-    const response = await PostRequest(`/files/${fileId}/share`, {
-      user_ids: recipients.flatMap((r) => (r.userId ? [r.userId] : [])),
-      emails: recipients.flatMap((r) =>
-        !r.userId && r.email ? [r.email] : []
-      ),
-      permission: restrict,
-      access_type: accessType === "public" ? "public" : "restricted",
-      message: message.trim(),
-    });
-    setIsSending(false);
+    let response;
+    try {
+      response = await PostRequest(`/files/${fileId}/share`, {
+        user_ids: recipients.flatMap((r) => (r.userId ? [r.userId] : [])),
+        emails: recipients.flatMap((r) =>
+          !r.userId && r.email ? [r.email] : []
+        ),
+        permission: restrict,
+        access_type: accessType === "public" ? "public" : "restricted",
+        message: message.trim(),
+      });
+    } catch {
+      showError("Could not share file", "Please try again.");
+      return;
+    } finally {
+      setIsSending(false);
+    }
 
     if (response?.status === 200 || response?.status === 201) {
       showSuccess(
