@@ -55,6 +55,9 @@ const emailSchema = z.string().email();
 const MAX_SUGGESTIONS = 5;
 const INVALID_RECIPIENT_MESSAGE =
   "Enter a valid email address or choose a workspace member.";
+const NOT_A_MEMBER_MESSAGE = "No workspace member uses this email address.";
+const OWN_ACCOUNT_MESSAGE = "You cannot share a file with yourself.";
+const LOOKUP_FAILED_MESSAGE = "Could not check this email. Please try again.";
 
 const toMemberRecipient = (user: UserSearchResult): Recipient => ({
   key: `user:${user.id}`,
@@ -84,8 +87,15 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
   const [isCopied, setIsCopied] = useState(false);
   const [showSelectCanView, setShowSelectCanView] = useState(false);
 
+  const currentUserId = state?.user?.user_id ?? state?.user?.id;
+
   const availableSuggestions = suggestions
-    .filter((user) => !recipients.some((r) => r.key === `user:${user.id}`))
+    .filter(
+      (user) =>
+        user.id !== currentUserId &&
+        !user.is_deactivated &&
+        !recipients.some((r) => r.key === `user:${user.id}`)
+    )
     .slice(0, MAX_SUGGESTIONS);
 
   useEffect(() => {
@@ -132,22 +142,39 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     setRecipientError("");
   };
 
-  const addTypedEmail = (): boolean => {
+  // The share API only takes workspace member IDs, so a typed email must
+  // belong to a member. Returns the member, an error message, or null when
+  // the input is empty.
+  const resolveTypedEmail = async (): Promise<Recipient | string | null> => {
     const typed = emailInput.trim();
-    if (!typed) return true;
+    if (!typed) return null;
+    if (!emailSchema.safeParse(typed).success) return INVALID_RECIPIENT_MESSAGE;
 
-    if (!emailSchema.safeParse(typed).success) {
-      setRecipientError(INVALID_RECIPIENT_MESSAGE);
-      return false;
-    }
+    const orgId = state?.orgId;
+    if (!orgId) return NOT_A_MEMBER_MESSAGE;
 
     const email = typed.toLowerCase();
-    const member = suggestions.find((u) => u.email?.toLowerCase() === email);
-    addRecipient(
-      member
-        ? toMemberRecipient(member)
-        : { key: `email:${email}`, label: email, email }
-    );
+    try {
+      const results = await searchUsers(orgId, email);
+      const member = results.find(
+        (u) => u.email?.toLowerCase() === email && !u.is_deactivated
+      );
+      if (!member) return NOT_A_MEMBER_MESSAGE;
+      if (member.id === currentUserId) return OWN_ACCOUNT_MESSAGE;
+      return toMemberRecipient(member);
+    } catch {
+      return LOOKUP_FAILED_MESSAGE;
+    }
+  };
+
+  const addTypedEmail = async (): Promise<boolean> => {
+    const result = await resolveTypedEmail();
+    if (result === null) return true;
+    if (typeof result === "string") {
+      setRecipientError(result);
+      return false;
+    }
+    addRecipient(result);
     return true;
   };
 
@@ -170,7 +197,7 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
       if (active) {
         addRecipient(toMemberRecipient(active));
       } else {
-        addTypedEmail();
+        void addTypedEmail();
       }
     } else if (
       e.key === "Backspace" &&
@@ -187,8 +214,17 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
 
   const handleSend = async () => {
     if (isSending || recipients.length === 0) return;
-    // Anything still in the input must be valid before sending.
-    if (!addTypedEmail()) return;
+
+    // Anything still in the input must be a valid member before sending.
+    let finalRecipients = recipients;
+    const typed = await resolveTypedEmail();
+    if (typeof typed === "string") {
+      setRecipientError(typed);
+      return;
+    }
+    if (typed && !recipients.some((r) => r.key === typed.key)) {
+      finalRecipients = [...recipients, typed];
+    }
 
     const fileId = fileToShare?.backendId ?? fileToShare?.id;
     if (!fileId) {
@@ -200,13 +236,13 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     let response;
     try {
       response = await PostRequest(`/files/${fileId}/share`, {
-        user_ids: recipients.flatMap((r) => (r.userId ? [r.userId] : [])),
-        emails: recipients.flatMap((r) =>
-          !r.userId && r.email ? [r.email] : []
+        access_type: accessType === "public" ? "public" : "private",
+        permission_type: restrict,
+        note: message.trim(),
+        share_via_dm: true,
+        recipient_ids: finalRecipients.flatMap((r) =>
+          r.userId ? [r.userId] : []
         ),
-        permission: restrict,
-        access_type: accessType === "public" ? "public" : "restricted",
-        message: message.trim(),
       });
     } catch {
       showError("Could not share file", "Please try again.");
@@ -218,8 +254,8 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
     if (response?.status === 200 || response?.status === 201) {
       showSuccess(
         "File shared",
-        `Shared with ${recipients.length} ${
-          recipients.length === 1 ? "person" : "people"
+        `Shared with ${finalRecipients.length} ${
+          finalRecipients.length === 1 ? "person" : "people"
         }.`
       );
       handleOpenChange(false);
@@ -327,7 +363,7 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
                   }}
                   onKeyDown={handleEmailKeyDown}
                   onBlur={() => {
-                    if (emailInput.trim()) addTypedEmail();
+                    if (emailInput.trim()) void addTypedEmail();
                   }}
                   placeholder={
                     recipients.length === 0 ? "Add people to send link to" : ""
@@ -439,6 +475,7 @@ const CreateShareModal: React.FC<CreateShareModalProps> = ({
             // className="w-full text-[#344054] placeholder:text-[#344054] min-h-[82px] rounded-[6px] px-4 py-2 focus:border-[#7141f8] border"
             className="w-full text-[#344054] placeholder:text-gray-400 min-h-[82px] rounded-[6px] px-4 py-2 border focus:border-[#7141f8] focus:ring-2 focus:ring-[#7141f8]/20 outline-none transition-all"
             id="share-note"
+            maxLength={500}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Add additional notes"
