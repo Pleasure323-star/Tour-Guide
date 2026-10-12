@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { ArrowLeft, Check, FileText } from "lucide-react";
 import { siteUrl } from "~/lib/env-urls";
 import {
@@ -67,7 +68,11 @@ export default async function TemplateDetailPage({
 
   return (
     <>
-      <TemplateDetailTracker slug={template.slug} />
+      {/* The tracker reads useSearchParams(), which requires a Suspense
+          boundary when the page is statically generated. */}
+      <Suspense fallback={null}>
+        <TemplateDetailTracker slug={template.slug} />
+      </Suspense>
       <section className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:px-10">
         <Link
           href="/resources?category=templates"
