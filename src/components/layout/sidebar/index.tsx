@@ -251,6 +251,7 @@ const SideBar: React.FC = () => {
 
                       <Link
                         href={`/${orgSlug}/settings/personal/account`}
+                        aria-label="Settings"
                         className={`flex flex-col group z-50 cursor-pointer mb-2 items-center justify-center w-full ${
                           pathname === `/${orgSlug}/settings`
                             ? "font-medium scale-[1.05]"
