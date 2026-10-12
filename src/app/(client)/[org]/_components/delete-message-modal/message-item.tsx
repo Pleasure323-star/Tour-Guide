@@ -11,6 +11,7 @@ import "prismjs/components/prism-css";
 import PreviewLinks from "../ChannelMessage/preview-links";
 import { replaceEmojiWithImages } from "~/lib/apple-emoji";
 import AssetToDelete from "./asset-to-delete";
+import { cn } from "~/lib/utils";
 
 /** @eslint-disable */
 
@@ -65,12 +66,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}
           components={{
-            a: ({ ...props }) => (
+            a: ({ className, href, ...props }: any) => (
               <a
-                {...props}
-                style={{ textDecoration: "underline", color: "blue" }}
+                href={href}
+                className={cn("smart-link-pill", className)}
+                title={typeof href === "string" ? href : undefined}
                 target="_blank"
                 rel="noopener noreferrer"
+                {...props}
               />
             ),
             table: (props) => (
