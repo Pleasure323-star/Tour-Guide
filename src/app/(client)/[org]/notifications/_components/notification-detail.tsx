@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { useContext } from "react";
 import moment from "moment";
-import { ArrowRight, Hash, Lock, MessageSquare } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarDays,
+  Hash,
+  Lock,
+  MessageSquare,
+} from "lucide-react";
 import FallbackImage from "~/components/layout/fallback-image";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
@@ -28,6 +34,12 @@ const getString = (value: unknown) =>
   typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
 
 const getTypeLabel = (type: string | null) => {
+  if (type?.startsWith("event_"))
+    return type === "event_reminder"
+      ? "Event reminder"
+      : type === "event_cancelled"
+        ? "Event cancelled"
+        : "Event updated";
   switch (type) {
     case "dm":
       return "Direct message";
@@ -60,6 +72,7 @@ export default function NotificationDetail({
   const route = resolveNotificationRoute(payload, null, state.orgSlug || "");
   const typeLabel = getTypeLabel(type);
   const isDm = type === "dm";
+  const isEvent = !!type?.startsWith("event_");
 
   return (
     <div className="flex h-[calc(100dvh-70px)] w-full flex-col bg-white">
@@ -75,7 +88,9 @@ export default function NotificationDetail({
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="flex min-h-0 flex-1 flex-col border-b border-[#E6EAEF] bg-white">
           <div className="flex items-center gap-2 border-b border-[#E6EAEF] bg-[#F9FAFB] px-5 py-3">
-            {isDm ? (
+            {isEvent ? (
+              <CalendarDays className="size-3.5 text-gray-600" />
+            ) : isDm ? (
               <Lock className="size-3.5 text-[#667085]" />
             ) : (
               <Hash className="size-3.5 text-[#667085]" />
@@ -132,9 +147,11 @@ export default function NotificationDetail({
                 {channelName || senderName}
               </p>
               <p className="mt-0.5 text-[13px] text-[#667085]">
-                {isDm
-                  ? "Reply in your direct message conversation."
-                  : "View this message in its channel."}
+                {isEvent
+                  ? "View this event in Events Hub."
+                  : isDm
+                    ? "Reply in your direct message conversation."
+                    : "View this message in its channel."}
               </p>
             </div>
           </div>
@@ -148,7 +165,7 @@ export default function NotificationDetail({
                 href={route}
                 onClick={() => storeMessageHighlightId(payload)}
               >
-                Open conversation
+                {isEvent ? "View event" : "Open conversation"}
                 <ArrowRight className="ml-2 size-4" />
               </Link>
             </Button>

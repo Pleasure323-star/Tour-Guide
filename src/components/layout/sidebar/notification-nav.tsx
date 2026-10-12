@@ -28,10 +28,14 @@ export default function NotificationNav() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const scopeRef = useRef("");
+  const requestRef = useRef(0);
 
   const resolvedOrgId =
     orgId ||
     (typeof window !== "undefined" ? localStorage.getItem("orgId") || "" : "");
+
+  scopeRef.current = String(resolvedOrgId);
 
   const fetchNotifications = useCallback(
     async (pageNumber: number) => {
@@ -40,17 +44,26 @@ export default function NotificationNav() {
         return;
       }
 
+      const request = ++requestRef.current;
+      const scope = String(resolvedOrgId);
       setLoading(true);
       const res = await GetRequest(
         `/organisations/${resolvedOrgId}/users/onesignal?page=${pageNumber}&limit=${LIMIT}`
       );
+
+      if (scopeRef.current !== scope || requestRef.current !== request) return;
 
       if (res?.status === 200 || res?.status === 201) {
         const items = res?.data?.data?.notifications || [];
         const pagination = res?.data?.data?.pagination;
 
         setNotifications((prev) =>
-          pageNumber === 1 ? items : [...prev, ...items]
+          pageNumber === 1
+            ? items
+            : [...prev, ...items].filter(
+                (item, index, all) =>
+                  all.findIndex((other) => other.id === item.id) === index
+              )
         );
 
         if (items.length === 0) {
@@ -72,9 +85,26 @@ export default function NotificationNav() {
   );
 
   useEffect(() => {
+    setNotifications([]);
     setPage(1);
     setHasMore(true);
     fetchNotifications(1);
+  }, [fetchNotifications]);
+
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") {
+        setPage(1);
+        setHasMore(true);
+        void fetchNotifications(1);
+      }
+    };
+    window.addEventListener("focus", refresh);
+    window.addEventListener("events-inbox-refresh", refresh);
+    return () => {
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("events-inbox-refresh", refresh);
+    };
   }, [fetchNotifications]);
 
   const loadMore = () => {
