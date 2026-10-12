@@ -1,8 +1,11 @@
+export type TemplateFileKind = "csv" | "txt";
+
 export interface ResourceTemplate {
   slug: string;
   title: string;
   description: string;
   fileType: "PDF" | "DOCX" | "XLSX" | "CSV";
+  fileKind: TemplateFileKind;
   fileName: string;
   preview: string;
   shareImage: string;
@@ -18,7 +21,8 @@ export const resourceTemplates: ResourceTemplate[] = [
     description:
       "A step-by-step checklist to welcome new learners, set expectations, and get every cohort member active in week one.",
     fileType: "PDF",
-    fileName: "zedu-cohort-onboarding-checklist.pdf",
+    fileKind: "txt",
+    fileName: "zedu-cohort-onboarding-checklist.txt",
     preview: "/images/homepage/resources/image-1.png",
     shareImage: "/images/homepage/resources/image-1.png",
     metaDescription:
@@ -42,6 +46,7 @@ export const resourceTemplates: ResourceTemplate[] = [
     description:
       "A ready-to-fill weekly timetable for lessons, office hours, and study sessions that keeps teachers and students aligned.",
     fileType: "XLSX",
+    fileKind: "csv",
     fileName: "zedu-weekly-class-schedule.csv",
     preview: "/images/homepage/resources/image-2.png",
     shareImage: "/images/homepage/resources/image-2.png",
@@ -65,7 +70,8 @@ export const resourceTemplates: ResourceTemplate[] = [
     description:
       "A fair, transparent grading rubric covering understanding, quality, presentation, and timeliness for any assignment.",
     fileType: "PDF",
-    fileName: "zedu-assignment-rubric.pdf",
+    fileKind: "txt",
+    fileName: "zedu-assignment-rubric.txt",
     preview: "/images/homepage/resources/image-3.png",
     shareImage: "/images/homepage/resources/image-3.png",
     metaDescription:
@@ -80,13 +86,7 @@ export const resourceTemplates: ResourceTemplate[] = [
         "Ideas unclear",
         "30%",
       ],
-      [
-        "Quality",
-        "Thorough and accurate",
-        "Minor gaps",
-        "Incomplete",
-        "30%",
-      ],
+      ["Quality", "Thorough and accurate", "Minor gaps", "Incomplete", "30%"],
       [
         "Presentation",
         "Well formatted",
@@ -103,7 +103,8 @@ export const resourceTemplates: ResourceTemplate[] = [
     description:
       "A structured feedback form mentors can use after each session to track progress, blockers, and next steps.",
     fileType: "DOCX",
-    fileName: "zedu-mentor-feedback-form.pdf",
+    fileKind: "txt",
+    fileName: "zedu-mentor-feedback-form.txt",
     preview: "/images/homepage/resources/image-4.png",
     shareImage: "/images/homepage/resources/image-4.png",
     metaDescription:
