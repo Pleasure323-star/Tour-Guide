@@ -78,13 +78,14 @@ this implementation. Before upstream review:
    it as Learning / Events Hub. Protected `.github/` files remain unchanged.
 3. Verify backend/frontend deployment origins and revisions, pilot organisation
    ID/slug, operator access, migrations and the active notice executor.
-4. Deploy and verify backend APIs/migrations/notices with the feature OFF, then
-   deploy the frontend and enable only the authorised pilot organisation.
+4. Deploy and verify backend APIs/migrations/notices, then deploy the frontend.
+   Events defaults ON for this staging integration and organisation settings
+   initialise automatically; no manual activation query is required.
 5. Use member/host/lead/non-member accounts in two independent browsers for
    create/publish/discover/RSVP/refresh/closed-browser reminder/Join, then
    reschedule/cancel/revoke/cross-org/mobile/keyboard checks and API restart.
 
-The default-OFF gate handles older backends. External HTTPS meetings and
+The capability gate handles unavailable backends and explicit disabling. External HTTPS meetings and
 persistent in-app notifications are the first-release workarounds; native
 scheduled Buzz and optional browser push are outside this acceptance.
 
