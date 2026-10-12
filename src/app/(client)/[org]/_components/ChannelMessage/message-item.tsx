@@ -53,6 +53,7 @@ import {
   isPreviewableDocument,
 } from "~/utils/document-files";
 import { useRouter } from "next/navigation";
+import { cn } from "~/lib/utils";
 
 /** @eslint-disable */
 
@@ -324,12 +325,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
                   </p>
                 );
               },
-              a: ({ ...props }) => (
+              a: ({ className, href, ...props }) => (
                 <a
-                  {...props}
-                  style={{ textDecoration: "underline", color: "blue" }}
+                  href={href}
+                  className={cn("smart-link-pill", className)}
+                  title={typeof href === "string" ? href : undefined}
                   target="_blank"
                   rel="noopener noreferrer"
+                  {...props}
                 />
               ),
               table: (props) => (

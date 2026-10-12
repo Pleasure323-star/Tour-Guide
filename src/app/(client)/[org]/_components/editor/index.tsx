@@ -768,7 +768,7 @@ const UseTextEditor = (
         autolink: true,
         defaultProtocol: "https",
         HTMLAttributes: {
-          class: "text-primary-500",
+          class: "smart-link-pill",
         },
       }),
       Code.configure({
