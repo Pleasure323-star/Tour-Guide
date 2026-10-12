@@ -8,7 +8,10 @@ beforeEach(() =>
 );
 const visit = () => {
   cy.clearAllLocalStorage();
-  return cy.visit("/events-test");
+  cy.visit("/events-test");
+  cy.get('[role="tab"][aria-selected="true"]').should("contain", "Upcoming");
+  cy.get('button[aria-pressed="true"]').should("have.length", 1);
+  return cy.contains("button", "Show all dates").click();
 };
 beforeEach(() => cy.viewport(1280, 900));
 describe("Browser-stored Events Hub", () => {

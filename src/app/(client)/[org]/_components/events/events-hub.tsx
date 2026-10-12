@@ -144,6 +144,11 @@ export function EventsHub() {
                   key={tab}
                   role="tab"
                   aria-selected={query.tab === tab}
+                  className={
+                    query.tab === tab
+                      ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+                      : "hover:bg-blue-50"
+                  }
                   variant={query.tab === tab ? "default" : "ghost"}
                   onClick={() =>
                     setQuery({

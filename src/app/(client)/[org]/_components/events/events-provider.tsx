@@ -44,7 +44,9 @@ function useController(organisationId: string) {
   const [query, setQuery] = useState<EventListQuery>({
     tab: "upcoming",
     q: "",
-    date: "",
+    date: new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Africa/Lagos",
+    }).format(new Date()),
     page: 1,
   });
   const [selectedId, setSelectedId] = useState<string | null>(null);
