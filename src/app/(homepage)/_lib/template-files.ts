@@ -3,7 +3,7 @@ import {
   type ResourceTemplate,
 } from "~/app/(homepage)/_lib/resource-templates";
 
-const MIME_TYPE = "text/plain;charset=utf-8";
+const MIME_TYPE = "text/plain; charset=utf-8";
 
 /** Renders the template as a plain-text document with an aligned table. */
 function templateToText(template: ResourceTemplate): string {
