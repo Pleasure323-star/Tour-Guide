@@ -1,7 +1,6 @@
 "use client";
 import { useContext } from "react";
 import { DataContext } from "~/store/GlobalState";
-import { withAuthGate } from "~/components/rbac/withAuthGate";
 import { EventsProvider } from "../../_components/events/events-provider";
 import { EventsHub } from "../../_components/events/events-hub";
 function EventsPage() {
@@ -15,4 +14,4 @@ function EventsPage() {
     </div>
   );
 }
-export default withAuthGate(EventsPage, { requiredPermission: "view:events" });
+export default EventsPage;

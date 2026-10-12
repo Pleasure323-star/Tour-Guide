@@ -60,7 +60,7 @@ export function EventDetails({
     setPending(true);
     setError("");
     setContinuation(null);
-    // Reserve a tab during the user's click; never place a destination in it before authorisation.
+    // Reserve a tab during the click so browsers can open the validated link.
     const tab = window.open("about:blank", "_blank");
     if (tab) tab.opener = null;
     try {
@@ -151,8 +151,9 @@ export function EventDetails({
                 the end. You can join without an RSVP.
               </p>
               <p className="mt-2 text-xs text-gray-600">
-                In-app reminder: {formatEventTime(event.reminderAt)}. RSVP
-                before this time to receive it.
+                Reminder while this page is open:{" "}
+                {formatEventTime(event.reminderAt)}. RSVP before this time to
+                receive it.
               </p>
               {!event.joinOpensAt && (
                 <p className="mt-2 text-sm">

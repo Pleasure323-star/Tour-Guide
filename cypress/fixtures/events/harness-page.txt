@@ -1,62 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EventsProvider } from "~/app/(client)/[org]/_components/events/events-provider";
 import { EventsHub } from "~/app/(client)/[org]/_components/events/events-hub";
-import NotificationDetail from "~/app/(client)/[org]/notifications/_components/notification-detail";
-import { DataContext } from "~/store/GlobalState";
-import { normalizeNotificationPayload } from "~/lib/onesignal/notification-route";
-import {
-  clearNotificationBadgeRegistry,
-  registerNotificationBadge,
-} from "~/lib/notifications/notification-badge";
 export default function Page() {
-  const [org, setOrg] = useState("org-a"),
-    [notice, setNotice] = useState(false),
-    [count, setCount] = useState(0);
-  useEffect(() => {
-    localStorage.setItem("orgId", org);
-    clearNotificationBadgeRegistry();
-  }, [org]);
-  const payload = {
-    notification_type: "event_reminder",
-    event_id: "session-1",
-    org_id: "org-a",
-    notification_id: "notice-1",
-  };
-  function publish() {
-    const data = normalizeNotificationPayload({ data: { payload } });
-    if (registerNotificationBadge(data)) setCount((value) => value + 1);
-  }
-  return (
-    <>
-      <button onClick={() => setOrg(org === "org-a" ? "org-b" : "org-a")}>
-        Switch test organisation
-      </button>
-      <button onClick={() => setNotice(true)}>Show test notification</button>
-      <button onClick={publish}>Receive nested notice</button>
-      <output aria-label="Notice badge">{count}</output>
-      {notice ? (
-        <DataContext.Provider
-          value={{
-            state: {
-              orgId: org,
-              orgSlug: org === "org-a" ? "team-a" : "team-b",
-            },
-          }}
-        >
-          <NotificationDetail
-            notification={{
-              title: "Session starts soon",
-              message: "Your RSVP session starts soon.",
-              payload,
-            }}
-          />
-        </DataContext.Provider>
-      ) : (
-        <EventsProvider organisationId={org}>
-          <EventsHub />
-        </EventsProvider>
-      )}
-    </>
-  );
+ const [org,setOrg] = useState("org-a");
+ return <><button onClick={() => setOrg(org === "org-a" ? "org-b" : "org-a")}>Switch test organisation</button><EventsProvider organisationId={org}><EventsHub /></EventsProvider></>;
 }

@@ -11,15 +11,33 @@ import { FeaturedEventCard } from "./featured-event-card";
 import { EventAgenda, EventDateStrip } from "./event-agenda";
 import { EventDetails } from "./event-details";
 import { EventForm } from "./event-form";
+import { getEventNotices } from "~/lib/events/api";
 export function EventsHub() {
-  const { state, query, setQuery, setSelectedId, selectedId, refresh } =
-    useEvents();
+  const {
+    state,
+    query,
+    setQuery,
+    setSelectedId,
+    selectedId,
+    refresh,
+    organisationId,
+  } = useEvents();
   const router = useRouter(),
     pathname = usePathname(),
     params = useSearchParams();
   const id = params.get("event");
   const [editingEvent, setEditingEvent] = useState<EventRecord | undefined>();
   const [form, setForm] = useState<"new" | "edit" | null>(null);
+  const [notices, setNotices] = useState<ReturnType<typeof getEventNotices>>(
+    []
+  );
+  useEffect(() => {
+    try {
+      setNotices(getEventNotices(organisationId));
+    } catch {
+      setNotices([]);
+    }
+  }, [organisationId, state.list, state.now]);
   const focus = useRef<HTMLElement | null>(null);
   const restoreFocus = useRef(false);
   useEffect(() => {
@@ -62,6 +80,30 @@ export function EventsHub() {
   return (
     <main className="min-h-[calc(100dvh-60px)] bg-gray-50 p-4 sm:p-6">
       <div className="mx-auto max-w-6xl">
+        <p className="mb-4 rounded-lg border bg-blue-50 p-3 text-sm text-gray-700">
+          Events and RSVPs are saved only in this browser for your account. You
+          can try organiser actions here. Changes do not sync with other people.
+          Reminders appear while this page is open. Add your own HTTPS meeting
+          link to try Join.
+        </p>
+        {notices.length > 0 && (
+          <section
+            aria-label="Event updates"
+            className="mb-4 rounded-lg border bg-white p-3"
+          >
+            <h2 className="font-semibold">Event updates</h2>
+            {notices.slice(0, 10).map((notice) => (
+              <Button
+                key={notice.id}
+                variant="link"
+                className="block h-auto whitespace-normal text-left"
+                onClick={() => select(notice.eventId)}
+              >
+                {notice.message}
+              </Button>
+            ))}
+          </section>
+        )}
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm text-gray-600">Learning</p>

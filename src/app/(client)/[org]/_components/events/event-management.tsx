@@ -101,8 +101,8 @@ export function EventManagement({
           <AlertDialogHeader>
             <AlertDialogTitle>Cancel this event?</AlertDialogTitle>
             <AlertDialogDescription>
-              Members with an RSVP will receive an in-app cancellation notice.
-              Joining and reminders will stop.
+              A cancellation update is saved in this browser. Joining and
+              reminders will stop. Joining and reminders will stop.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
