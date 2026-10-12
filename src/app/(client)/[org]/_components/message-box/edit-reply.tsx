@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Bold,
   Italic,
@@ -39,6 +39,8 @@ const EditReplyMessageBox = ({ subscription, sendMessage }: any) => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [url, setUrl] = useState("");
+  const urlRef = useRef(url);
+  urlRef.current = url;
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [showFormatting, setShowformatting] = useState(true);
 
@@ -214,13 +216,12 @@ const EditReplyMessageBox = ({ subscription, sendMessage }: any) => {
                             )
                               .then((res) => (res.ok ? res.json() : null))
                               .then((data) => {
+                                if (urlRef.current.trim() !== trimmed) {
+                                  return;
+                                }
                                 const rawTitle = data?.title?.trim();
-                                if (
-                                  rawTitle &&
-                                  rawTitle !== "No Title" &&
-                                  !text
-                                ) {
-                                  setText(rawTitle);
+                                if (rawTitle && rawTitle !== "No Title") {
+                                  setText((prev) => prev || rawTitle);
                                 }
                               })
                               .catch(() => {});

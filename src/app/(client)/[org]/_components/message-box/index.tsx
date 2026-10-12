@@ -122,6 +122,8 @@ const MessageBox = ({
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [url, setUrl] = useState("");
+  const urlRef = useRef(url);
+  urlRef.current = url;
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [isGifPickerOpen, setIsGifPickerOpen] = useState(false);
   const [showFormatting, setShowformatting] = useState(true);
@@ -621,13 +623,12 @@ const MessageBox = ({
                               )
                                 .then((res) => (res.ok ? res.json() : null))
                                 .then((data) => {
+                                  if (urlRef.current.trim() !== trimmed) {
+                                    return;
+                                  }
                                   const rawTitle = data?.title?.trim();
-                                  if (
-                                    rawTitle &&
-                                    rawTitle !== "No Title" &&
-                                    !text
-                                  ) {
-                                    setText(rawTitle);
+                                  if (rawTitle && rawTitle !== "No Title") {
+                                    setText((prev) => prev || rawTitle);
                                   }
                                 })
                                 .catch(() => {});

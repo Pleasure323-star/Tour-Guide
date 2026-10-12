@@ -675,6 +675,7 @@ const UseTextEditor = (
       () => slashPopulateRef.current!
     )();
 
+  const editorRef = useRef<any>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -828,6 +829,7 @@ const UseTextEditor = (
 
             const url = pastedText;
             const { tr, schema } = state;
+            const insertPos = tr.selection.from;
             const linkMark = schema.marks.link?.create({ href: url });
             const textNode = schema.text(url, linkMark ? [linkMark] : []);
             const spaceNode = schema.text(" ");
@@ -836,32 +838,38 @@ const UseTextEditor = (
             tr.insert(tr.selection.to, spaceNode);
             view.dispatch(tr);
 
+            const editorInstance = editorRef.current || (view as any).editor;
+            let trackedPos = insertPos;
+
+            const onTransaction = ({ transaction }: { transaction: any }) => {
+              if (transaction?.mapping) {
+                trackedPos = transaction.mapping.map(trackedPos, 1);
+              }
+            };
+
+            editorInstance?.on("transaction", onTransaction);
+            const cleanup = () => {
+              editorInstance?.off("transaction", onTransaction);
+            };
+
             // Fetch metadata to auto-embed with page title
             void fetch(`/api/link-preview?url=${encodeURIComponent(url)}`)
               .then((res) => (res.ok ? res.json() : null))
               .then((data) => {
+                cleanup();
+                if (editorInstance?.isDestroyed) return;
+
                 const rawTitle = data?.title?.trim();
                 if (rawTitle && rawTitle !== "No Title" && rawTitle !== url) {
-                  let targetRange: { from: number; to: number } | null = null;
-                  view.state.doc.descendants((node, pos) => {
-                    if (targetRange) return false;
-                    if (node.isText && node.text === url) {
-                      const hasLink = node.marks.some(
-                        (m) => m.type.name === "link" && m.attrs.href === url
-                      );
-                      if (hasLink) {
-                        targetRange = { from: pos, to: pos + node.nodeSize };
-                        return false;
-                      }
-                    }
-                  });
-
-                  const range = targetRange as {
-                    from: number;
-                    to: number;
-                  } | null;
-
-                  if (range) {
+                  const node = view.state.doc.nodeAt(trackedPos);
+                  if (
+                    node &&
+                    node.isText &&
+                    node.text === url &&
+                    node.marks.some(
+                      (m) => m.type.name === "link" && m.attrs.href === url
+                    )
+                  ) {
                     const updateTr = view.state.tr;
                     const newLinkMark = view.state.schema.marks.link?.create({
                       href: url,
@@ -870,12 +878,18 @@ const UseTextEditor = (
                       rawTitle,
                       newLinkMark ? [newLinkMark] : []
                     );
-                    updateTr.replaceWith(range.from, range.to, newTextNode);
+                    updateTr.replaceWith(
+                      trackedPos,
+                      trackedPos + node.nodeSize,
+                      newTextNode
+                    );
                     view.dispatch(updateTr);
                   }
                 }
               })
-              .catch(() => {});
+              .catch(() => {
+                cleanup();
+              });
 
             return true;
           }
@@ -885,6 +899,8 @@ const UseTextEditor = (
       },
     },
   });
+
+  editorRef.current = editor;
 
   return {
     editor,
