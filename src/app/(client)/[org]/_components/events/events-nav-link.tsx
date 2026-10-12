@@ -44,15 +44,15 @@ export function EventsNavLink() {
   if (!visible || resolved !== scope || !state.orgSlug) return null;
   return (
     <Link
-      href={`/${encodeURIComponent(state.orgSlug)}/events`}
+      href={`/${encodeURIComponent(state.orgSlug)}/settings/events`}
       aria-label="Learning / Events Hub"
-      aria-current={pathname.endsWith("/events") ? "page" : undefined}
+      aria-current={pathname.endsWith("/settings/events") ? "page" : undefined}
       className="flex flex-col items-center justify-center p-1 text-white"
     >
       <span
         className={cn(
           "rounded-lg p-2",
-          pathname.endsWith("/events") && "bg-blue-200"
+          pathname.endsWith("/settings/events") && "bg-blue-200"
         )}
       >
         <CalendarDays className="size-6" />

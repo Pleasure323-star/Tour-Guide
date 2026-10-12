@@ -25,7 +25,7 @@ describe("Persistent event notice presentation", () => {
     cy.contains("a", "View event").should(
       "have.attr",
       "href",
-      "/team-a/events?event=session-1"
+      "/team-a/settings/events?event=session-1"
     );
   });
   it("refuses to route a notice from a different organisation", () => {

@@ -43,7 +43,8 @@ cp cypress/fixtures/events/harness-page.txt 'src/app/(events-test)/events-test/p
 pnpm dev --port 3012
 ```
 
-In a second terminal:
+In a second terminal, set `EVENTS_TEST_BASE_URL` to the running frontend
+origin before executing the checks:
 
 ```sh
 pnpm exec cypress run --spec 'cypress/e2e/events/*.cy.ts' --config baseUrl="$EVENTS_TEST_BASE_URL",video=false,screenshotsFolder=/private/tmp/events-fe-screens
@@ -72,8 +73,9 @@ this implementation. Before upstream review:
 1. Obtain approved ticket IDs and rename/split this feature branch
    into sequential review slices of about 400 meaningful lines. Submit only
    ticket branches to `zedu-hng/zedu-fe:dev`; keep one PR open per author.
-2. A maintainer must allow `src/app/(client)/[org]/events/page.tsx` in the review
-   configuration. Protected `.github/` files are intentionally unchanged.
+2. The page uses the existing approved settings route tree at
+   `src/app/(client)/[org]/settings/events/page.tsx`; the main sidebar opens
+   it as Learning / Events Hub. Protected `.github/` files remain unchanged.
 3. Verify backend/frontend deployment origins and revisions, pilot organisation
    ID/slug, operator access, migrations and the active notice executor.
 4. Deploy and verify backend APIs/migrations/notices with the feature OFF, then
@@ -101,7 +103,7 @@ state when WebSocket delivery is unavailable.
 ## Verification evidence
 
 - pnpm 10.27.0; format, ESLint and TypeScript checks passed.
-- Production build passed with `/{org}/events` and the temporary harness absent.
+- Production build passed with `/{org}/settings/events` and the temporary harness absent.
   TypeScript was checked separately because production build skips validation.
 - Feature Cypress: 24 passing checks across capability/discovery, member and
   organiser workflows, refresh regressions, mobile and notification routing.

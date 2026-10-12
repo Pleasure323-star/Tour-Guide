@@ -166,7 +166,7 @@ export const resolveNotificationRoute = (
     const currentSlug = orgSlugOverride || getOrgSlugForNotification();
     if (!currentSlug || !currentOrg || String(data.org_id) !== currentOrg)
       return null;
-    return `/${encodeURIComponent(currentSlug)}/events?event=${encodeURIComponent(eventId)}`;
+    return `/${encodeURIComponent(currentSlug)}/settings/events?event=${encodeURIComponent(eventId)}`;
   }
 
   const directRoute =
