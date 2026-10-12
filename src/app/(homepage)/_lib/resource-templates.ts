@@ -52,9 +52,7 @@ export const resourceTemplates: ResourceTemplate[] = [
     rows: [
       ["Day", "Time", "Session", "Owner", "Location"],
       ["Monday", "09:00", "Maths - Algebra basics", "Ms. Ada", "Room 4"],
-      ["Monday", "11:00", "English - Essay writing", "Mr. Cole", "Room 2"],
       ["Tuesday", "09:00", "Science - Lab safety", "Dr. Efe", "Lab A"],
-      ["Tuesday", "13:00", "Office hours", "All teachers", "Library"],
       ["Wednesday", "09:00", "History - Project work", "Ms. Bisi", "Room 4"],
       ["Thursday", "09:00", "Maths - Practice set", "Ms. Ada", "Room 4"],
       ["Friday", "10:00", "Assembly and review", "Head of school", "Hall"],
