@@ -10,6 +10,7 @@ import Code from "@tiptap/extension-code";
 import HardBreak from "@tiptap/extension-hard-break";
 import SlackCodeBlock from "./slack-code-block";
 import { AppleEmoji } from "./apple-emoji";
+import { closeHistory } from "@tiptap/pm/history";
 
 // Shift+Enter: MessageHardBreak. Plain Enter: message-box (send / lists).
 const MessageHardBreak = HardBreak.extend({
@@ -871,6 +872,7 @@ const UseTextEditor = (
                     )
                   ) {
                     const updateTr = view.state.tr;
+                    closeHistory(updateTr);
                     const newLinkMark = view.state.schema.marks.link?.create({
                       href: url,
                     });
