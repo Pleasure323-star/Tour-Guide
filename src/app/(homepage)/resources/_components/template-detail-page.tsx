@@ -41,7 +41,7 @@ export async function TemplateDetailPage({ params }: TemplatePageProps) {
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-neutral-100 px-2 py-1 text-xs font-medium text-neutral-700">
                 <FileText size={12} aria-hidden="true" />
-                {template.fileType}
+                {template.fileType.toUpperCase()}
               </span>
             </div>
             <h1 className="text-2xl font-semibold leading-tight text-neutral-900 sm:text-3xl lg:text-4xl">
