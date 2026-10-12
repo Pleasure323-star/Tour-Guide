@@ -80,12 +80,6 @@ export function EventsHub() {
   return (
     <main className="min-h-[calc(100dvh-60px)] bg-gray-50 p-4 sm:p-6">
       <div className="mx-auto max-w-6xl">
-        <p className="mb-4 rounded-lg border bg-blue-50 p-3 text-sm text-gray-700">
-          Events and RSVPs are saved only in this browser for your account. You
-          can try organiser actions here. Changes do not sync with other people.
-          Reminders appear while this page is open. Add your own HTTPS meeting
-          link to try Join.
-        </p>
         {notices.length > 0 && (
           <section
             aria-label="Event updates"

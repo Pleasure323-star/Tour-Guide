@@ -20,11 +20,11 @@ export function EventAgenda({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="divide-y rounded-xl border bg-white">
+    <div className="space-y-3">
       {items.map((event) => (
         <article
           key={event.id}
-          className="flex min-w-0 items-start gap-3 p-4 sm:p-5"
+          className="flex min-w-0 items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-4 sm:p-5"
         >
           <CalendarDays
             className="mt-1 size-5 shrink-0 text-blue-500"
@@ -127,7 +127,11 @@ export function EventDateStrip({
               variant={date === value ? "default" : "ghost"}
               aria-label={`Filter ${value}`}
               aria-pressed={date === value}
-              className="h-14 flex-col gap-1 px-0"
+              className={`h-14 flex-col gap-1 px-0 ${
+                date === value
+                  ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+                  : "hover:bg-blue-50"
+              }`}
               onClick={() => {
                 setWeek(start);
                 onDate(date === value ? "" : value);

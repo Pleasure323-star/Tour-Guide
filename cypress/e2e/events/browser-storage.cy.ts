@@ -20,7 +20,6 @@ describe("Browser-stored Events Hub", () => {
     });
     visit();
     cy.contains("Community learning session").should("be.visible");
-    cy.contains("Changes do not sync with other people").should("be.visible");
     cy.contains("button", "Community learning session").click();
     cy.contains("button", /^RSVP$/).click();
     cy.window().should((win) => {
