@@ -7,7 +7,7 @@ interface RouteContext {
 
 export async function GET(_req: NextRequest, context: RouteContext) {
   const { slug } = await context.params;
-  const file = buildTemplateFile(slug);
+  const file = await buildTemplateFile(slug);
   if (!file) {
     return NextResponse.json(
       { error: "Template not found." },
@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, context: RouteContext) {
       }
     );
   }
-  return new NextResponse(file.content, {
+  return new NextResponse(new Uint8Array(file.content), {
     status: 200,
     headers: {
       "Content-Type": file.mimeType,
