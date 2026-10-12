@@ -34,7 +34,9 @@ async function response<T>(request: Promise<any>): Promise<T> {
     throw new EventApiError(
       res?.status || 0,
       res?.data?.message || "Unable to load events. Please try again.",
-      res?.data?.errors || {}
+      res?.data?.error && typeof res.data.error === "object"
+        ? res.data.error
+        : {}
     );
   }
   return res.data.data as T;
@@ -129,10 +131,17 @@ async function eventResponse(request: Promise<any>): Promise<EventResult> {
 }
 export const getEvent = (orgId: string, id: string) =>
   eventResponse(GetRequest(path(orgId, id)));
-export const saveEvent = (orgId: string, input: EventWriteInput, id?: string) =>
-  eventResponse(
-    id ? PatchRequest(path(orgId, id), input) : PostRequest(base(orgId), input)
+export const saveEvent = (
+  orgId: string,
+  input: EventWriteInput,
+  id?: string
+) => {
+  const { host_id, ...fields } = input;
+  const body = host_id ? { ...fields, host_id } : fields;
+  return eventResponse(
+    id ? PatchRequest(path(orgId, id), body) : PostRequest(base(orgId), body)
   );
+};
 export const publishEvent = (orgId: string, id: string, revision: number) =>
   eventResponse(
     PostRequest(`${path(orgId, id)}/publish`, { expected_revision: revision })
@@ -150,7 +159,7 @@ export const setFeaturedEvent = (
   id: string | null,
   revision: number
 ) =>
-  response<{ featured_revision: number }>(
+  response<{ event_id: string | null; revision: number; server_now: string }>(
     PutRequest(`${base(orgId)}/featured`, {
       event_id: id,
       expected_revision: revision,

@@ -21,6 +21,13 @@ export function EventsHub() {
   const [editingEvent, setEditingEvent] = useState<EventRecord | undefined>();
   const [form, setForm] = useState<"new" | "edit" | null>(null);
   const focus = useRef<HTMLElement | null>(null);
+  const restoreFocus = useRef(false);
+  useEffect(() => {
+    if (!selectedId && restoreFocus.current) {
+      restoreFocus.current = false;
+      focus.current?.focus();
+    }
+  }, [selectedId]);
   useEffect(() => {
     setSelectedId(id);
   }, [id, setSelectedId]);
@@ -30,7 +37,7 @@ export function EventsHub() {
     if (eventId) next.set("event", eventId);
     else next.delete("event");
     router.push(`${pathname}${next.size ? `?${next}` : ""}`, { scroll: false });
-    if (!eventId) requestAnimationFrame(() => focus.current?.focus());
+    if (!eventId) restoreFocus.current = true;
   }
   const allowed = state.capabilities?.enabled && state.capabilities.canView;
   if (!allowed)

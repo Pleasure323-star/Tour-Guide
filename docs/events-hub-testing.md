@@ -1,8 +1,6 @@
 # Events Hub frontend testing
 
-Local implementation branch: `feat/events-hub-frontend`, based on local `dev`.
-The original `feat/events-hub-local-demo` checkout and its uncommitted prototype
-are preserved. This branch contains production components, not demo modules.
+Implementation branch: `feat/events-hub-frontend`, based on `dev`.
 
 ## Contract
 
@@ -25,7 +23,7 @@ Success responses use `data`; errors use HTTP status and `message`.
   revision, not the event revision.
 - Join returns `{url, kind: external, server_now}` only after fresh authority
   and time checks. The frontend validates HTTPS/no embedded credentials again.
-- Event notices carry `notification_type` (`event_reminder`, `event_changed`,
+- Event notices carry `notification_type` (`event_reminder`, `event_updated`,
   `event_cancelled`), `event_id`, `org_id`, `notification_id`. They contain no
   meeting destination. The existing inbox remains the delivery source of truth.
 
@@ -34,7 +32,7 @@ search. Existing RBAC maps `can_view_events`, `can_manage_events` and
 `can_feature_events` to the corresponding event keys; the backend capabilities
 remain authoritative. No permissions catalog or default role data is invented.
 
-## Local Cypress checks
+## Cypress checks
 
 Use project-pinned pnpm 10.27.0. The harness is stored only under Cypress
 fixtures; it is never part of the production route tree. Create it temporarily:
@@ -48,10 +46,10 @@ pnpm dev --port 3012
 In a second terminal:
 
 ```sh
-pnpm exec cypress run --spec 'cypress/e2e/events/*.cy.ts' --config baseUrl=http://localhost:3012,video=false,screenshotsFolder=/private/tmp/events-fe-screens
+pnpm exec cypress run --spec 'cypress/e2e/events/*.cy.ts' --config baseUrl="$EVENTS_TEST_BASE_URL",video=false,screenshotsFolder=/private/tmp/events-fe-screens
 ```
 
-Stop the local server and remove the harness before checking or committing:
+Stop the development server and remove the harness before checking or committing:
 
 ```sh
 rm 'src/app/(events-test)/events-test/page.tsx'
@@ -69,9 +67,9 @@ production components; they do not prove deployed API or worker behaviour.
 ## Review and deployment prerequisites
 
 No push, PR, merge, migration, feature activation or deployment is authorised by
-this local implementation. Before upstream review:
+this implementation. Before upstream review:
 
-1. Obtain approved ticket IDs and rename/split this descriptive local branch
+1. Obtain approved ticket IDs and rename/split this feature branch
    into sequential review slices of about 400 meaningful lines. Submit only
    ticket branches to `zedu-hng/zedu-fe:dev`; keep one PR open per author.
 2. A maintainer must allow `src/app/(client)/[org]/events/page.tsx` in the review
@@ -100,15 +98,13 @@ Join capabilities refresh at known server-time boundaries. No browser timer
 creates reminder records. Background polling and focus refresh reconcile shared
 state when WebSocket delivery is unavailable.
 
-## Local verification evidence
+## Verification evidence
 
 - pnpm 10.27.0; format, ESLint and TypeScript checks passed.
 - Production build passed with `/{org}/events` and the temporary harness absent.
   TypeScript was checked separately because production build skips validation.
 - Feature Cypress: 24 passing checks across capability/discovery, member and
   organiser workflows, refresh regressions, mobile and notification routing.
-- Built HTML uses the existing `/mainapp/_next/` asset prefix and no demo
-  controls. Generic organisation routing can also match `demo` as an org slug;
-  it still uses normal authentication and event capabilities, never demo state.
+- Built HTML uses the existing `/mainapp/_next/` asset prefix.
 - Real backend, deployment, two-account and closed-browser worker acceptance
   remain unverified until the deployment prerequisites above are satisfied.

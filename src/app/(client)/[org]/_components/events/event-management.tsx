@@ -60,7 +60,7 @@ export function EventManagement({
                 Publish event
               </Button>
             )}
-            {event.status !== "cancelled" && (
+            {event.status === "published" && (
               <Button
                 variant="outline"
                 disabled={pending}

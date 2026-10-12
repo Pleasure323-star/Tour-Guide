@@ -153,6 +153,9 @@ describe("Shared Events workflows", () => {
     cy.wait("@create")
       .its("request.body")
       .should("have.property", "operation_id");
+    cy.get("@create")
+      .its("request.body")
+      .should("not.have.property", "host_id");
     cy.contains("button", event.title).click();
     cy.contains("button", "Edit event").click();
     cy.intercept("PATCH", "**/events/session-1", {
@@ -412,5 +415,34 @@ describe("Detail focus restoration", () => {
     cy.contains("button", event.title).click();
     cy.contains("button", "Back to events").click();
     cy.focused().should("have.text", event.title);
+  });
+});
+
+describe("Backend contract regressions", () => {
+  it("shows singular backend validation errors on the matching field", () => {
+    setup();
+    cy.intercept("GET", "**/organisations/org-a/users?*", {
+      body: { data: [] },
+    });
+    cy.intercept("POST", "**/events", {
+      statusCode: 422,
+      body: {
+        message: "Please check the request",
+        error: { title: "Use a shorter event title" },
+      },
+    }).as("invalidDraft");
+    cy.contains("button", "Host an event").click();
+    cy.get('[name="title"]').type("New session");
+    cy.contains("button", "Save draft").click();
+    cy.wait("@invalidDraft");
+    cy.contains("Use a shorter event title")
+      .scrollIntoView()
+      .should("be.visible");
+  });
+  it("offers publication rather than cancellation for a draft", () => {
+    setup({ ...event, status: "draft" });
+    cy.contains("button", event.title).click();
+    cy.contains("button", "Publish event").should("be.visible");
+    cy.contains("button", "Cancel event").should("not.exist");
   });
 });
