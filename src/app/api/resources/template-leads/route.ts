@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getTemplateBySlug } from "~/app/(homepage)/_lib/resource-templates";
+import {
+  sendTemplateConfirmationEmail,
+  templateConfirmationSubject,
+} from "~/emails/template-confirmation";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(120),
@@ -51,6 +55,35 @@ function isRateLimited(ip: string) {
 
 export function getTemplateLeads() {
   return leads;
+}
+
+// Newsletter consent opt-in: same backend endpoint the homepage footer uses
+// (PostRequest("/newsletter")), so it needs no new configuration — only the
+// existing NEXT_PUBLIC_BASE_URL. Best-effort by design: a backend hiccup must
+// never block the template download the user actually asked for.
+async function subscribeToNewsletter(email: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  if (!baseUrl) return;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  try {
+    const res = await fetch(`${baseUrl}/newsletter`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      console.warn(`[templates] newsletter opt-in failed: ${res.status}`);
+    }
+  } catch (error) {
+    console.warn(
+      "[templates] newsletter opt-in failed:",
+      error instanceof Error ? error.message : "unknown error"
+    );
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -108,23 +141,34 @@ export async function POST(req: NextRequest) {
   leads.push(lead);
   if (data.consent) {
     newsletterSubscribers.add(lead.email);
+    await subscribeToNewsletter(lead.email);
   }
 
   const downloadUrl = `${origin}/api/resources/templates/${template.slug}/download`;
   const fileUrl = `${origin}/api/resources/templates/${template.slug}/file`;
   const unsubscribeUrl = `${origin}/api/resources/newsletter/unsubscribe?email=${encodeURIComponent(lead.email)}`;
 
-  // No email provider is configured in this repo, so the confirmation email
-  // content is returned in the response for the client to display (and for a
-  // future provider to send without changing the contract).
+  const subject = templateConfirmationSubject(template.title);
+  // Provider is optional: with RESEND_* vars unset (as in this repo today)
+  // nothing is sent and the original JSON contract is preserved, so the
+  // client keeps rendering the same content it always has.
+  const emailSent = await sendTemplateConfirmationEmail({
+    to: lead.email,
+    name: lead.name,
+    templateTitle: template.title,
+    fileUrl,
+    unsubscribeUrl,
+  });
+
   return NextResponse.json({
     success: true,
     downloadUrl,
     confirmationEmail: {
       to: lead.email,
-      subject: `Your ${template.title} is ready`,
+      subject,
       fileUrl,
       unsubscribeUrl,
+      sent: emailSent,
     },
   });
 }
