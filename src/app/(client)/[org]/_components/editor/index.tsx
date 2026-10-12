@@ -873,12 +873,9 @@ const UseTextEditor = (
                   ) {
                     const updateTr = view.state.tr;
                     closeHistory(updateTr);
-                    const newLinkMark = view.state.schema.marks.link?.create({
-                      href: url,
-                    });
                     const newTextNode = view.state.schema.text(
                       rawTitle,
-                      newLinkMark ? [newLinkMark] : []
+                      node.marks
                     );
                     updateTr.replaceWith(
                       trackedPos,
