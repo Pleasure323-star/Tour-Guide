@@ -580,8 +580,8 @@ New to the internship? [`HNG15-INTERNSHIP.md`](./HNG15-INTERNSHIP.md) is a one-p
 ### 1. Ground rules
 
 - **Every change needs an approved ticket** in ClickUp or Linear. Nothing starts from an untracked chat request.
-- **One ticket per PR, one person per PR.** Each member opens their own PR from their own ticket branch. No team branches and no combined PRs: we review per developer, so nobody's work is held up by someone else's. If you find another problem, open another ticket.
-- **One logical change, about 400 lines.** Size PRs by scope, not time: with AI tools a day's work can be thousands of lines. A PR is one logical change of at most ~400 lines of meaningful code (lockfiles and generated files like `*.tsbuildinfo` don't count; `hotfix` PRs are exempt). Larger changes need a reviewer's `size-override` label, or they get split.
+- **Team PRs are allowed.** A team can consolidate several members' work into one PR from its fork. The **Single author**, **Branch name** and **Size** checks are switched off for now: they still report, as passed, and can be switched back on. For a consolidated PR, put the main ticket in the branch and in the title (`fix(CHAT-12): …`) and list the other tickets in the description. The earlier rule is kept for when it returns: _one ticket per PR, one person per PR. Each member opens their own PR from their own ticket branch, with no team branches and no combined PRs, so nobody's work is held up by someone else's. If you find another problem, open another ticket._
+- **One logical change, about 400 lines.** _(The Size check is switched off for now; a consolidated PR can be larger.)_ Size PRs by scope, not time: with AI tools a day's work can be thousands of lines. A PR is one logical change of at most ~400 lines of meaningful code (lockfiles and generated files like `*.tsbuildinfo` don't count; `hotfix` PRs are exempt). Larger changes need a reviewer's `size-override` label, or they get split.
 - **Shippable slice.** After your PR merges the app must still work and nothing half-finished may be visible to users. If a feature needs several tickets, land the non-visible parts first and open each dependent PR after the previous one merges (see [Working on a ticket](#4-working-on-a-ticket)).
 - **One open PR per author.**
 - **Your team lead reviews first.** They approve on your PR; Zedu reviewers pick it up after that.
@@ -610,7 +610,7 @@ Branches in your team's fork:
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `dev`                       | Mirror of `zedu-hng:dev`. Sync only; never commit to it.                                                                                            |
 | `staging`                   | Team sandbox. Your lead merges ticket branches here to try them live on `<team>.groups.zedu.chat`. Never a PR source; reset it from `dev` any time. |
-| `<type>/<ticket-id>-<desc>` | One ticket. The only branch you open a PR from.                                                                                                     |
+| `<type>/<ticket-id>-<desc>` | One ticket. The only branch you open a PR from. (The name format is not enforced for now; keep the main ticket in it.)                              |
 
 Fork from **`zedu-hng/zedu-fe`**, not from `zeduchat`. Otherwise your PRs and **Sync fork** point at the wrong repo.
 
@@ -634,7 +634,7 @@ Fork from **`zedu-hng/zedu-fe`**, not from `zeduchat`. Otherwise your PRs and **
    Types: `feat`, `fix`, `hotfix`, `test`, `docs`, `refactor`, `chore`, `perf`, `security`. The ticket ID is either a number or a prefix plus number. Example: `feat/CHAT-142-typing-indicator` or `fix/245-login-redirect`.
 
 4. Commit with [Conventional Commits](https://www.conventionalcommits.org/) (see [Commit messages](#commit-messages)). The PR title must pass commitlint too, and it becomes the squashed commit message.
-5. Commit only as yourself. The **Single author** check fails a PR with commits from more than one person. If you commit from several emails, add all of them to your GitHub account, or they count as different authors. Credit a collaborator with a `Co-authored-by:` trailer instead.
+5. Commit only as yourself. The **Single author** check, which is switched off for now (a team PR may hold several people's commits), fails a PR with commits from more than one person when it is on. If you commit from several emails, add all of them to your GitHub account, or they count as different authors. Credit a collaborator with a `Co-authored-by:` trailer instead.
 
 **Multi-ticket features:** GitHub doesn't support stacked PRs across forks, and a PR's base must be a branch in `zedu-hng`, so you can't base one ticket's PR on another's fork branch. Order the tickets so the additive, non-visible parts land first, and open each dependent PR after the previous one merges: sync `dev`, branch from it, and use the next ticket. The **PR title** check requires the PR's ticket to match its branch.
 

@@ -46,6 +46,8 @@
 
 ## Mandatory checks
 
+_A consolidated team PR ticks **Atomic** per ticket and lists its tickets in the description. The Size check is switched off for now._
+
 - [ ] **Atomic:** one logical change, at most ~400 lines of meaningful code (lockfiles and generated files like `*.tsbuildinfo` don't count). Larger needs a `size-override` label from a reviewer.
 - [ ] **Database / API contract:** schema changes follow Expand-Contract — no destructive drops or renames.
 - [ ] **Preview:** I checked the change in the PR's preview (or ran it locally, if the PR has no preview).
