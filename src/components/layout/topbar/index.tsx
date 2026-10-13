@@ -44,6 +44,7 @@ import {
 import { RequirePermission } from "~/components/rbac/RequirePermission";
 import { useRBAC } from "~/hooks/useRBAC";
 import { isOwnerOrAdministrator } from "~/utils/rbac";
+import NavigationHistory from "~/components/layout/topbar/navigation-history";
 
 const Topbar = () => {
   const name: string = localStorage.getItem("channelName") || "";
@@ -510,13 +511,16 @@ const Topbar = () => {
       </div>
 
       {!pathname.includes(`/${orgSlug}/welcome`) && (
-        <div className="hidden sm:flex">
-          <SearchInput name={name} orgId={orgData?.id} />
+        <div className="flex min-w-0 items-center sm:flex-1 sm:max-w-2xl">
+          <NavigationHistory />
+          <div className="hidden min-w-0 sm:block sm:flex-1">
+            <SearchInput name={name} orgId={orgData?.id} />
+          </div>
         </div>
       )}
 
       {/* Rightmost section: AI Credits */}
-      <div className="flex h-full w-3/5 lg:w-auto  items-center lg:py-1 mr-2 lg:mr-0 lg:gap-6">
+      <div className="flex h-full min-w-0 lg:w-auto items-center lg:py-1 mr-2 lg:mr-0 lg:gap-6">
         <PillWidget />
         <MiniWidget />
       </div>
