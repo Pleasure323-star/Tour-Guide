@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
 import { ArrowBtn, OutlineBtn } from "../ui/Button";
+import { MetricCounter, type HeroMetric } from "./MetricCounter";
 
-const metrics = [
+const metrics: HeroMetric[] = [
   { text: "Learners supported", amount: "10,000+" },
   { text: "Conversations powered by AI", amount: "15,000+" },
   { text: "Educator satisfaction", amount: "98%" },
@@ -51,21 +52,7 @@ const HeroSection = () => {
           Trusted by most modern educators and learners worldwide
         </p>
       </div>
-      <div className="grid w-full max-w-4xl grid-cols-3 place-items-center gap-1.5 sm:gap-6 md:gap-10">
-        {metrics.map((metric, i) => (
-          <div
-            key={i}
-            className="flex w-full max-w-[260px] flex-col items-center justify-center gap-1 px-1.5 py-1 sm:flex-col sm:gap-1 sm:px-4 sm:py-3"
-          >
-            <p className="text-lg font-semibold text-neutral-900 sm:text-3xl">
-              {metric.amount}
-            </p>
-            <p className="text-[10px] leading-tight text-neutral-500 sm:text-sm">
-              {metric.text}
-            </p>
-          </div>
-        ))}
-      </div>{" "}
+      <MetricCounter metrics={metrics} />{" "}
       <div className="w-full max-w-6xl overflow-hidden rounded-2xl">
         <div className="relative aspect-[16/10]  w-full sm:aspect-[16/9] lg:aspect-[2/1] ">
           <Image
