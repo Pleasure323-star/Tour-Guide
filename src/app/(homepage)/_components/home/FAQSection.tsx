@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { homeFAQs, type HomeFAQ } from "../../_lib/faqData";
 import { Accordion } from "~/components/ui/accordion";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { FAQAccordionItem } from "./faq/FAQAccordionItem";
 
 type FAQSectionProps = {
@@ -11,6 +14,16 @@ type FAQSectionProps = {
 
 export const FAQSection = ({ faqs = homeFAQs }: FAQSectionProps) => {
   const [openItem, setOpenItem] = useState<string | null>(null);
+  const isHomepage = usePathname() === "/";
+  const [query, setQuery] = useState("");
+  const searchId = useId();
+  const searchRef = useRef<HTMLInputElement>(null);
+  const normalizedQuery = isHomepage ? query.trim().toLowerCase() : "";
+  const filteredFAQs = faqs.filter(
+    (faq) =>
+      faq.question.toLowerCase().includes(normalizedQuery) ||
+      faq.answer.toLowerCase().includes(normalizedQuery)
+  );
 
   const handleToggle = (value: string) => {
     setOpenItem(value || null);
@@ -29,21 +42,64 @@ export const FAQSection = ({ faqs = homeFAQs }: FAQSectionProps) => {
         </p>
       </div>
       <div className="w-full max-w-4xl text-left">
-        <Accordion
-          type="single"
-          collapsible
-          value={openItem || ""}
-          onValueChange={handleToggle}
-          className="space-y-4"
-        >
-          {faqs.map((faq) => (
-            <FAQAccordionItem
-              key={faq.id}
-              faq={faq}
-              isOpen={openItem === faq.id}
-            />
-          ))}
-        </Accordion>
+        {isHomepage && (
+          <div className="mb-6 space-y-2">
+            <label
+              htmlFor={searchId}
+              className="text-sm font-medium text-neutral-900"
+            >
+              Search FAQs
+            </label>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                ref={searchRef}
+                id={searchId}
+                type="search"
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setOpenItem(null);
+                }}
+                className="min-w-0 focus-visible:ring-2 focus-visible:ring-offset-2"
+              />
+              {query && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setQuery("");
+                    setOpenItem(null);
+                    searchRef.current?.focus();
+                  }}
+                >
+                  Clear search
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+        {isHomepage && (
+          <p role="status" className="text-sm text-neutral-600">
+            {filteredFAQs.length === 0 ? "No FAQs match your search." : ""}
+          </p>
+        )}
+        {filteredFAQs.length > 0 && (
+          <Accordion
+            type="single"
+            collapsible
+            value={openItem || ""}
+            onValueChange={handleToggle}
+            className="space-y-4"
+          >
+            {filteredFAQs.map((faq) => (
+              <FAQAccordionItem
+                key={faq.id}
+                faq={faq}
+                isOpen={openItem === faq.id}
+              />
+            ))}
+          </Accordion>
+        )}
       </div>
     </section>
   );
