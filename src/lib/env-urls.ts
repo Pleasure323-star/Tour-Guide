@@ -18,10 +18,6 @@ export function contactSalesUrl(): string {
   return `${readEnv("NEXT_PUBLIC_BASE_URL")}/contact`;
 }
 
-export function ambassadorFormUrl(): string {
-  return readEnv("NEXT_PUBLIC_AMBASSADOR_FORM_URL");
-}
-
 export function appStoreUrl(): string {
   return readEnv("NEXT_PUBLIC_APP_STORE_URL");
 }

@@ -1,14 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { ambassadorFormUrl } from "~/lib/env-urls";
 import { cn } from "~/lib/utils";
+
+// Public config: read straight from the environment (kept out of `~/lib/env-urls`).
+const formUrl = (process.env.NEXT_PUBLIC_AMBASSADOR_FORM_URL ?? "").trim();
 
 const buttonClass =
   "h-auto min-h-[46px] rounded-full bg-primary-500 px-4 py-2.5 text-base font-medium text-white duration-200 hover:bg-primary-400 sm:min-h-[50px] sm:px-6 sm:py-3";
 
 export const ApplyButton = ({ className }: { className?: string }) => {
-  const formUrl = ambassadorFormUrl();
-
   if (!formUrl) {
     return (
       <Button
