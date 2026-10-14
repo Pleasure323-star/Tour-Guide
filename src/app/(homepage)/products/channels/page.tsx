@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { ogImageUrl, siteUrl } from "~/lib/env-urls";
 import Image from "next/image";
-import { ArrowBtn, OutlineBtn } from "../../_components/ui/Button";
+import { ArrowBtn } from "../../_components/ui/Button";
+import { ChannelsHero } from "../../_components/products/channels-hero";
 import {
   FilesIcon,
   MessagesQuestionIcon,
@@ -142,41 +143,7 @@ const channelsFAQs: HomeFAQ[] = [
 const ChannelProductPage = () => {
   return (
     <>
-      <section className="relative isolate overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 left-1/2 -z-10 h-[30%] w-screen -translate-x-1/2 bg-gradient-to-t from-blue-50/30 to-white"
-        />
-        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 rounded-[28px] px-5 py-8 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-14 lg:px-12 lg:py-14 min-h-[85dvh]">
-          <div className="flex flex-col items-center gap-5 text-center lg:max-w-[470px] lg:items-start lg:text-left">
-            <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] lg:leading-[1.12]">
-              <span className="text-primary-500">Organise Learning</span> with
-              Structured Channels.
-            </h1>
-            <p className="max-w-[46ch] text-sm leading-relaxed text-[#5a6170] sm:text-base">
-              Channels keep discussions organized by course, cohort, or topic so
-              students and educators always know where conversations belong.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <ArrowBtn text="Start using channels" linkToHome />
-              <OutlineBtn text="Watch a Demo" />
-            </div>
-          </div>
-
-          <div className="relative w-full overflow-hidden rounded-3xl">
-            <div className="relative aspect-[16/11] w-full sm:aspect-[4/3] lg:aspect-[16/10]">
-              <Image
-                src="/images/homepage/products/channels-hero.png"
-                alt="Zedu channels product screenshot"
-                fill
-                priority
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 680px"
-                className="object-contain object-center"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <ChannelsHero />
       <section className="relative isolate overflow-visible space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16 mt-5">
         <div>
           <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] text-center lg:leading-[1.12]">
