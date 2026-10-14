@@ -4,9 +4,8 @@ import { ChannelsHero } from "../../_components/products/channels-hero";
 import { ChannelsFeatures } from "../../_components/products/channels-features";
 import { ChannelsScale } from "../../_components/products/channels-scale";
 import { ChannelsPlatform } from "../../_components/products/channels-platform";
-import { FAQSection } from "../../_components/home/FAQSection";
-import { DynamicFooter } from "../../_components/footer/dynamic-footer";
-import type { HomeFAQ } from "../../_lib/faqData";
+import { ChannelsFAQ } from "../../_components/products/channels-faq";
+import { ChannelsCTA } from "../../_components/products/channels-cta";
 
 export const metadata: Metadata = {
   title: "Channels",
@@ -57,33 +56,6 @@ export const metadata: Metadata = {
   },
 };
 
-const channelsFAQs: HomeFAQ[] = [
-  {
-    id: "channels-item-1",
-    question: "When should I use Channels?",
-    answer:
-      "Use Channels whenever you need to organize conversations by class, topic, or team so discussions stay focused and easy to follow.",
-  },
-  {
-    id: "channels-item-2",
-    question: "What can I do in a Channels?",
-    answer:
-      "You can share updates, ask questions, post resources, and collaborate through threaded discussions with students, educators, or teams.",
-  },
-  {
-    id: "channels-item-3",
-    question: "How do I start a Channels?",
-    answer:
-      "Create a new channel from your workspace, give it a clear name based on purpose, and invite the right participants to begin the conversation.",
-  },
-  {
-    id: "channels-item-4",
-    question: "Are Channels free?",
-    answer:
-      "Channels availability depends on your workspace plan. You can start with available features and upgrade if you need advanced collaboration tools.",
-  },
-];
-
 const ChannelProductPage = () => {
   return (
     <>
@@ -91,12 +63,8 @@ const ChannelProductPage = () => {
       <ChannelsFeatures />
       <ChannelsScale />
       <ChannelsPlatform />
-
-      <FAQSection faqs={channelsFAQs} />
-      <DynamicFooter
-        text="Organize Your Learning Community with Channels"
-        description="Create structured spaces where students, educators, and teams can collaborate effectively."
-      />
+      <ChannelsFAQ />
+      <ChannelsCTA />
     </>
   );
 };
