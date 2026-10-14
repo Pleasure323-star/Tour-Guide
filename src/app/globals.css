@@ -536,6 +536,49 @@ code {
   background: #fff3b0;
 }
 
+/* Smart Link Pill (compact inline link chip with icon and truncation) */
+.smart-link-pill,
+.custom-message a.smart-link-pill {
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  vertical-align: -0.2em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background-color: rgba(2, 132, 199, 0.1);
+  color: #0284c7;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.smart-link-pill:hover,
+.custom-message a.smart-link-pill:hover {
+  background-color: rgba(2, 132, 199, 0.18);
+  text-decoration: underline;
+}
+
+.smart-link-pill::before,
+.custom-message a.smart-link-pill::before {
+  content: "";
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  vertical-align: -0.1em;
+  margin-right: 0.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'%3E%3C/path%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
 /* Raise Hand Animations */
 @keyframes slide-up {
   from {
@@ -652,6 +695,22 @@ html.dark .mention[data-id="channel"],
 html.dark .mention[data-label="channel" i] {
   background: #4a3f00;
   color: #f5d90a;
+}
+
+html.dark .smart-link-pill,
+html.dark .custom-message a.smart-link-pill {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+html.dark .smart-link-pill:hover,
+html.dark .custom-message a.smart-link-pill:hover {
+  background-color: rgba(56, 189, 248, 0.25);
+}
+
+html.dark .smart-link-pill::before,
+html.dark .custom-message a.smart-link-pill::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'%3E%3C/path%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'%3E%3C/path%3E%3C/svg%3E");
 }
 
 html.dark .absolute button .name-span {
