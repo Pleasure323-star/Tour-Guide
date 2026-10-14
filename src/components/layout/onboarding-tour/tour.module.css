@@ -1,0 +1,370 @@
+.tourOverlay {
+  position: fixed;
+  z-index: 9000;
+  inset: 0;
+  background: rgba(20, 18, 49, 0.45);
+  animation: fadeIn 180ms ease-out;
+}
+
+.tourModal {
+  position: fixed;
+  z-index: 9001;
+  left: 50%;
+  top: 50%;
+  width: min(480px, calc(100vw - 40px));
+  transform: translate(-50%, -50%);
+  padding: 38px 40px 36px;
+  border: 1px solid rgba(74, 64, 172, 0.09);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(28, 23, 72, 0.25);
+  text-align: center;
+  animation: modalIn 220ms cubic-bezier(0.2, 0.75, 0.3, 1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  color: #6f6c80;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.closeButton:hover {
+  color: #302b69;
+  background: #f3f1fb;
+}
+
+.eyebrow {
+  margin-bottom: 11px;
+  color: #5b51d8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tourModal h1 {
+  max-width: 390px;
+  margin: 0 auto 13px;
+  color: #28235c;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+}
+
+.tourModal p {
+  max-width: 365px;
+  margin: 0 auto;
+  color: #716f87;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.button {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.buttonPrimary {
+  color: #ffffff;
+  background: #5b51d8;
+  box-shadow: 0 2px 6px rgba(66, 53, 184, 0.24);
+}
+
+.buttonPrimary:hover {
+  background: #4940c1;
+  box-shadow: 0 4px 10px rgba(66, 53, 184, 0.3);
+  transform: translateY(-1px);
+}
+
+.buttonSecondary {
+  border-color: #dedced;
+  color: #494661;
+  background: #ffffff;
+}
+
+.buttonSecondary:hover:not(:disabled) {
+  border-color: #aaa5d7;
+  color: #37317a;
+  background: #f8f7fc;
+}
+
+.buttonText {
+  min-height: 36px;
+  padding: 0 4px;
+  border: none;
+  color: #69657e;
+  background: transparent;
+  cursor: pointer;
+}
+
+.buttonText:hover {
+  color: #4940c1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.button:disabled {
+  border-color: #e7e6ed;
+  color: #aba9b5;
+  background: #f4f3f6;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tourPopover {
+  position: fixed;
+  z-index: 9001;
+  left: 105px;
+  width: 370px;
+  padding: 22px 22px 18px;
+  border: 1px solid rgba(72, 61, 166, 0.1);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 18px 48px rgba(29, 24, 76, 0.24);
+  animation: popoverIn 200ms cubic-bezier(0.2, 0.75, 0.3, 1);
+}
+
+.popoverPointer {
+  position: absolute;
+  left: -8px;
+  top: 31px;
+  width: 16px;
+  height: 16px;
+  transform: rotate(45deg);
+  border-bottom: 1px solid rgba(72, 61, 166, 0.1);
+  border-left: 1px solid rgba(72, 61, 166, 0.1);
+  background: #ffffff;
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.progressLabel {
+  color: #5b51d8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.progressDots {
+  display: flex;
+  gap: 5px;
+}
+
+.progressDots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background: #dedcea;
+  transition: background-color 150ms ease;
+}
+
+.progressDots .filled {
+  background: #5b51d8;
+}
+
+.tourPopover h2 {
+  margin: 0 0 8px;
+  color: #29245e;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+}
+
+.tourPopover p {
+  margin: 0;
+  color: #716f87;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.popoverActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #efedf5;
+}
+
+.stepButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.tourPopover .button {
+  min-height: 36px;
+  padding: 0 14px;
+}
+
+.completionModal {
+  width: min(455px, calc(100vw - 40px));
+}
+
+.completionCheck {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  color: #5b51d8;
+  background: #eeecff;
+}
+
+.completionCheck svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes popoverIn {
+  from {
+    opacity: 0;
+    transform: translateX(-7px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .tourModal {
+    width: calc(100vw - 28px);
+    padding: 34px 24px 27px;
+  }
+
+  .tourModal h1 {
+    font-size: 23px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .modalActions .button {
+    width: 100%;
+  }
+
+  .tourPopover {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    top: auto !important;
+    width: auto !important;
+    padding: 20px 19px 16px;
+    border-radius: 14px;
+    animation-name: sheetIn;
+  }
+
+  .popoverPointer {
+    display: none !important;
+  }
+
+  .popoverActions {
+    align-items: flex-end;
+  }
+}
+
+@media (max-width: 390px) {
+  .tourPopover {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 8px !important;
+  }
+
+  .popoverActions {
+    gap: 8px;
+  }
+
+  .tourPopover .button {
+    padding: 0 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tourOverlay,
+  .tourModal,
+  .tourPopover {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

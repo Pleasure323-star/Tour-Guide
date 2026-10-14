@@ -78,6 +78,7 @@ const SideBar: React.FC = () => {
                             ? `/${orgSlug}/home/channels/${channelId}`
                             : `/${orgSlug}`
                         }
+                        data-tour-target="home"
                         className={`flex flex-col group items-center justify-center p-1 ${
                           pathname === `/${orgSlug}/home`
                             ? "font-medium scale-[1.05]"
@@ -100,6 +101,7 @@ const SideBar: React.FC = () => {
                       <Link
                         href={`/${orgSlug}/dm`}
                         data-sidebar-preview="dms"
+                        data-tour-target="dms"
                         className={`flex flex-col group items-center justify-center p-1 ${
                           pathname === `/${orgSlug}`
                             ? "font-medium scale-[1.05]"
@@ -121,6 +123,7 @@ const SideBar: React.FC = () => {
                       <Link
                         href={`/${orgSlug}/people`}
                         data-sidebar-preview="people"
+                        data-tour-target="people"
                         className={`flex flex-col group items-center justify-center p-1 ${
                           pathname?.includes(`/${orgSlug}/people`)
                             ? "font-medium scale-[1.05]"
