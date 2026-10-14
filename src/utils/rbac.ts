@@ -24,9 +24,6 @@ export const ROLE_HIERARCHY: Record<string, number> = {
 };
 
 const CAN_TO_CANONICAL: Record<string, PermissionKey> = {
-  can_view_events: "view:events",
-  can_manage_events: "manage:events",
-  can_feature_events: "feature:events",
   can_manage_channels: "manage:channels",
   can_manage_members: "manage:members",
   can_manage_organization: "manage:organization",
@@ -105,9 +102,6 @@ export const normalizePermissionsList = (
 
 export const DEFAULT_ROLE_PERMISSIONS: RolePermissionsMap = {
   owner: [
-    "view:events",
-    "manage:events",
-    "feature:events",
     "manage:channels",
     "manage:members",
     "manage:organization",
@@ -135,9 +129,6 @@ export const DEFAULT_ROLE_PERMISSIONS: RolePermissionsMap = {
     "change:user_org_role",
   ],
   administrator: [
-    "view:events",
-    "manage:events",
-    "feature:events",
     "manage:channels",
     "manage:members",
     "manage:organization",
@@ -163,8 +154,6 @@ export const DEFAULT_ROLE_PERMISSIONS: RolePermissionsMap = {
     "change:user_org_role",
   ],
   manager: [
-    "view:events",
-    "manage:events",
     "manage:channels",
     "manage:members",
     "manage:settings",
@@ -184,9 +173,6 @@ export const DEFAULT_ROLE_PERMISSIONS: RolePermissionsMap = {
     "change:user_org_role",
   ],
   project_lead: [
-    "view:events",
-    "manage:events",
-    "feature:events",
     "manage:channels",
     "view:channels",
     "edit:messages",
@@ -196,7 +182,6 @@ export const DEFAULT_ROLE_PERMISSIONS: RolePermissionsMap = {
     "comment:threads",
   ],
   user: [
-    "view:events",
     "view:channels",
     "edit:messages",
     "create:channels",

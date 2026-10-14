@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext } from "react";
-import { usePathname } from "next/navigation";
 import SettingsNav from "./components/settings-nav";
 import { DataContext } from "~/store/GlobalState";
 import { SettingsRolesLoadingContext } from "./context/settings-roles-loading-context";
@@ -13,13 +12,10 @@ interface LayoutProps {
 
 function Layout({ children }: LayoutProps) {
   const { state } = useContext(DataContext);
-  const pathname = usePathname();
   const rolesLoading =
     Boolean(state.orgAccessLoading) || state.orgRoles == null;
   const permissionsLoading =
     Boolean(state.orgAccessLoading) || state.permissionsCatalog == null;
-
-  if (pathname.endsWith("/settings/events")) return <>{children}</>;
 
   return (
     <SettingsRolesLoadingContext.Provider

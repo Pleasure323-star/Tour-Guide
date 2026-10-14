@@ -10,9 +10,6 @@ export type PredefinedRole =
 export type UserRole = PredefinedRole | string;
 
 export type PermissionKey =
-  | "view:events"
-  | "manage:events"
-  | "feature:events"
   | "manage:channels"
   | "manage:members"
   | "manage:organization"
