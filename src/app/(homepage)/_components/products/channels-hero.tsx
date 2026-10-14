@@ -182,7 +182,7 @@ export const ChannelsHero = () => {
 
         <figure
           aria-label="Preview of the cs-101 channel in Zedu"
-          className="relative m-0 min-w-0 flex-[1_1_520px] px-2 pb-10 pt-7"
+          className="relative m-0 min-w-0 flex-[1_1_520px] px-2 pb-10 pt-[76px] sm:pt-7"
         >
           <div
             className="absolute inset-y-0 left-10 right-0 rounded-[32px] bg-[#EAEAFE]"
@@ -215,8 +215,8 @@ export const ChannelsHero = () => {
               ))}
             </div>
 
-            <div className="flex min-w-0 flex-1 flex-col gap-4 px-5 py-[18px]">
-              <div className="flex items-center justify-between border-b border-[#EEF0FF] pb-3">
+            <div className="flex min-w-0 flex-1 flex-col gap-4 px-4 py-[18px] sm:px-5">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-[#EEF0FF] pb-3">
                 <p className="text-base font-bold">
                   # cs-101{" "}
                   <span className="text-[13px] font-normal text-[#5A6170]">
@@ -244,7 +244,7 @@ export const ChannelsHero = () => {
                 text="Can we use while loops for question 3, or only for loops?"
               />
 
-              <div className="ml-12 border-l-2 border-[#E2E8F0] pl-3.5">
+              <div className="ml-5 border-l-2 border-[#E2E8F0] pl-3 sm:ml-12 sm:pl-3.5">
                 <Message
                   small
                   avatar={AVATAR_ADEYEMI}
