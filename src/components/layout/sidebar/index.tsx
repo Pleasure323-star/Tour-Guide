@@ -24,8 +24,6 @@ import {
   isNotificationsRoute,
 } from "~/lib/notifications/notification-badge";
 
-import { EventsNavLink } from "~/app/(client)/[org]/_components/events/events-nav-link";
-
 const SideBar: React.FC = () => {
   const pathname = usePathname();
   const { state, dispatch } = useContext(DataContext);
@@ -74,7 +72,6 @@ const SideBar: React.FC = () => {
                         dispatch({ type: ACTIONS.OPEN_SIDEBAR, payload: false })
                       }
                     >
-                      <EventsNavLink />
                       <Link
                         href={
                           channelId

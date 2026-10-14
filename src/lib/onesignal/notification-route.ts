@@ -142,16 +142,6 @@ export const resolveNotificationRoute = (
     getString(data.org_slug) ||
     getOrgSlugForNotification(data.org_id);
 
-  const eventId = getString(data.event_id);
-  if (eventId && getString(data.notification_type)?.startsWith("event_")) {
-    const currentOrg =
-      typeof window !== "undefined" ? localStorage.getItem("orgId") : null;
-    const currentSlug = orgSlugOverride || getOrgSlugForNotification();
-    if (!currentSlug || !currentOrg || String(data.org_id) !== currentOrg)
-      return null;
-    return `/${encodeURIComponent(currentSlug)}/settings/events?event=${encodeURIComponent(eventId)}`;
-  }
-
   const directRoute =
     normalizeInternalPath(getString(data.route)) ||
     normalizeInternalPath(getString(data.path)) ||

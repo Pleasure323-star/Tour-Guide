@@ -19,8 +19,6 @@ import {
   releaseChannelSubscription,
 } from "~/lib/centrifugo/shared-centrifuge";
 
-import { normalizeNotificationPayload } from "~/lib/onesignal/notification-route";
-
 const CLIENT_URL = process.env.NEXT_PUBLIC_CLIENT_URL;
 
 //
@@ -72,35 +70,7 @@ export default function GeneralNotificationConnection() {
       getToken: () => getSubscriptionToken(channel),
     });
 
-    const seenEventNotices = new Set<string>();
     const onPublication = (ctx: any) => {
-      const notice = normalizeNotificationPayload(ctx?.data || {});
-      if (
-        typeof notice.notification_type === "string" &&
-        notice.notification_type.startsWith("event_")
-      ) {
-        const noticeId =
-          typeof notice.notification_id === "string"
-            ? notice.notification_id
-            : "";
-        if (
-          String(notice.org_id) !== String(orgId) ||
-          !noticeId ||
-          seenEventNotices.has(noticeId)
-        )
-          return;
-        seenEventNotices.add(noticeId);
-        window.dispatchEvent(new CustomEvent("events-inbox-refresh"));
-        dispatch({ type: ACTIONS.NOTIFICATIONS, payload: ctx?.data });
-        dispatch({ type: ACTIONS.NOTIFY, payload: notice });
-        if (
-          !isHomeRoute(pathnameRef.current) &&
-          !isNotificationsRoute(pathnameRef.current) &&
-          registerNotificationBadge(notice)
-        )
-          dispatch({ type: ACTIONS.INCREMENT_NOTIFICATION_BADGE });
-        return;
-      }
       dispatch({ type: ACTIONS.NOTIFICATIONS, payload: ctx?.data });
       dispatch({ type: ACTIONS.NOTIFY, payload: ctx?.data?.data });
 
