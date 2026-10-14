@@ -1,22 +1,7 @@
+import { orgSlugFromPathname } from "~/lib/reserved-paths";
+
 const getString = (value: unknown): string | null =>
   typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
-
-const RESERVED_PATH_SEGMENTS = new Set([
-  "auth",
-  "accept_org_invitation",
-  "accept_general_invitation",
-  "billing",
-  "about",
-  "pricing",
-  "resources",
-  "policy",
-  "download",
-  "products",
-  "solutions",
-  "contact-sales",
-  "terms-of-service",
-  "account",
-]);
 
 const mergeNestedObject = (
   base: Record<string, unknown>,
@@ -122,10 +107,8 @@ const appendMessageDeepLink = (
 export const getOrgSlugForNotification = (payloadOrgId?: unknown): string => {
   if (typeof window === "undefined") return "";
 
-  const [firstSegment] = window.location.pathname.split("/").filter(Boolean);
-  if (firstSegment && !RESERVED_PATH_SEGMENTS.has(firstSegment)) {
-    return firstSegment;
-  }
+  const pathSlug = orgSlugFromPathname(window.location.pathname);
+  if (pathSlug) return pathSlug;
 
   const storedSlug = localStorage.getItem("orgSlug");
   if (storedSlug) return storedSlug;
@@ -158,6 +141,16 @@ export const resolveNotificationRoute = (
     orgSlugOverride ||
     getString(data.org_slug) ||
     getOrgSlugForNotification(data.org_id);
+
+  const eventId = getString(data.event_id);
+  if (eventId && getString(data.notification_type)?.startsWith("event_")) {
+    const currentOrg =
+      typeof window !== "undefined" ? localStorage.getItem("orgId") : null;
+    const currentSlug = orgSlugOverride || getOrgSlugForNotification();
+    if (!currentSlug || !currentOrg || String(data.org_id) !== currentOrg)
+      return null;
+    return `/${encodeURIComponent(currentSlug)}/settings/events?event=${encodeURIComponent(eventId)}`;
+  }
 
   const directRoute =
     normalizeInternalPath(getString(data.route)) ||

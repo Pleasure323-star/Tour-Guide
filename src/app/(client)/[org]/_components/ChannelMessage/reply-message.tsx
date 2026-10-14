@@ -154,6 +154,13 @@ const ReplyMessages = ({
     );
   };
 
+  const handleRowClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (window.innerWidth < 1024) {
+      event.stopPropagation();
+      handlePopup();
+    }
+  };
+
   const handleClick = (emoji: any, e: any) => {
     handleUpdateEmoji(emoji.reaction);
     e.stopPropagation();
@@ -164,6 +171,7 @@ const ReplyMessages = ({
   return (
     <div
       id={item?.id ? `reply-${item.id}` : undefined}
+      onClick={handleRowClick}
       className={`h-[100%] relative group py-1 transition-colors flex items-start gap-2 px-3 ${item.is_pinned ? "bg-yellow-50" : isSaved ? "bg-primary-50" : "hover:bg-gray-50"}`}
     >
       <div className="flex shrink-0 items-center justify-center">
@@ -185,13 +193,11 @@ const ReplyMessages = ({
           </>
         ) : (
           <span className="mt-1 block w-[36px] text-xs text-[#98A2B3] opacity-0 transition-opacity group-hover:opacity-100">
-            {new Date(item?.created_at)
-              .toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(/\s?(am|pm)/i, "")}
+            {new Date(item?.created_at).toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            })}
           </span>
         )}
       </div>
@@ -327,7 +333,7 @@ const ReplyMessages = ({
 
         {popupId === item.id && (
           <div
-            onClick={handlePopup}
+            onClick={(event) => event.stopPropagation()}
             className="flex lg:hidden group-hover:opacity-100 transition-opacity flex items-center ml-4 absolute right-5 -top-6 z-10 bg-white shadow-md rounded-[8px] border border-[#E6EAEF] p-[2px]"
           >
             {!pathname?.includes("/agents") && (

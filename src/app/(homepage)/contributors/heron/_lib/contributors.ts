@@ -38,7 +38,7 @@ export const contributors: Contributor[] = [
   { name: "Ayotomiwa Ayorinde", zeduUsername: "zamaar" },
   { name: "Kesiena Cruz Ohwots", zeduUsername: "kesiena_cruz" },
   { name: "Olorode Fikayo", zeduUsername: "fikayo olorode" },
-  { name: "Abdulazeez yusuf", zeduUsername: "Ola Yusuf" },
+  { name: "Olanrewaju Yusuf", zeduUsername: "Ola Yusuf" },
   { name: "Ukanna Raymond", zeduUsername: "ukanna raymond" },
   { name: "Molly", zeduUsername: "Remaswoman" },
   { name: "Zakari Muhammad Samu", zeduUsername: "ZakariMS" },
@@ -52,4 +52,6 @@ export const contributors: Contributor[] = [
   { name: "Hamzat Adebayo", zeduUsername: "HamzatAdebayo" },
   { name: "Daniel Akor", zeduUsername: "danielakor" },
   { name: "Shoyemi Maria", zeduUsername: "Nike" },
+  { name: "Chimaobi Damian", zeduUsername: "chimaobivictor" },
+  { name: "Oluwalayomi Olayinka", zeduUsername: "oluwalayomiolayinka0" },
 ];

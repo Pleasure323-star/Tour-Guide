@@ -35,4 +35,6 @@ export const zeduWeaverContributors: Contributor[] = [
   { name: "Helen Efebe", username: "HelenGift" },
   { name: "Kharimah", username: "Kharimah" },
   { name: "Ugwoke Victor", username: "victech-1" },
+  { name: "Faithie Icheke", username: "Imani of Nations" },
+  { name: "Ayotunde Jeffers Doherty", username: "Jeffers" },
 ];

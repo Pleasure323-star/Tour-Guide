@@ -23,6 +23,8 @@ import { formatCount } from "~/utils/utils";
 // import AddColleagueDialog from "~/app/(client)/[org]/_components/colleagues/add-colleagues-modal";
 // import { ColleaguesCard } from "~/app/(client)/[org]/_components/colleagues/card";
 
+const HOME_DM_SIDEBAR_LIMIT = 12;
+
 export default function ChannelNav({
   resizerRef,
   sidebarWidth,
@@ -90,6 +92,9 @@ export default function ChannelNav({
 
   const channelsReady = Array.isArray(state?.channels);
   const homeDmsReady = Array.isArray(state?.homeDms);
+  const homeDms = homeDmsReady ? state.homeDms : [];
+  const visibleHomeDms = homeDms.slice(0, HOME_DM_SIDEBAR_LIMIT);
+  const showAllPeople = homeDms.length > HOME_DM_SIDEBAR_LIMIT;
   const threadsReady = Array.isArray(state?.threadMentions);
   const unseenThreadCount = state?.unseenThreadCount ?? 0;
   const showThreadsBadge = unseenThreadCount > 0;
@@ -165,7 +170,7 @@ export default function ChannelNav({
                   "text-[15px] leading-4 truncate w-[180px] text-blue-50"
                 )}
               >
-                Buzzs
+                Buzzes
               </p>
             </Link>
           )}
@@ -311,7 +316,7 @@ export default function ChannelNav({
                   </Tooltips>
                 </div>
                 <AccordionContent onClick={handleClose}>
-                  {state.homeDms.map((item: any, index: number) => (
+                  {visibleHomeDms.map((item: any, index: number) => (
                     <div
                       className="mb-1"
                       key={item?.channel_id || item?.channels_id || index}
@@ -320,7 +325,7 @@ export default function ChannelNav({
                     </div>
                   ))}
 
-                  {state.homeDms.length === 0 && (
+                  {visibleHomeDms.length === 0 && (
                     <p className="text-xs text-center text-blue-50">
                       No recent chats. Start a new conversation!
                     </p>
@@ -330,7 +335,7 @@ export default function ChannelNav({
             </Accordion>
           )}
 
-          {homeDmsReady && (
+          {homeDmsReady && showAllPeople && (
             <Link
               href={`/${orgSlug}/home/people`}
               className={cn(

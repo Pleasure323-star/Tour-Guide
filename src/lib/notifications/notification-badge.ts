@@ -27,6 +27,11 @@ export const getNotificationBadgeKey = (payload: NotificationLike): string => {
       ? (payload.data as Record<string, unknown>)
       : {};
 
+  const noticeId =
+    getString(payload.notification_id) || getString(nested.notification_id);
+  if (noticeId)
+    return `event:${getString(payload.org_id) || getString(nested.org_id) || ""}:${noticeId}`;
+
   const notificationType =
     getString(payload.notification_type) || getString(payload.event);
   const channelId =
@@ -61,6 +66,7 @@ export const shouldIncrementNotificationBadge = (
     getString(payload.notification_type) || getString(payload.event);
   const section = getString(payload.section);
 
+  if (notificationType?.startsWith("event_")) return true;
   if (notificationType === "new_message") return true;
   if (notificationType === "dm") return true;
   if (notificationType === "mention") return true;

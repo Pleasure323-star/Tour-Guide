@@ -1,0 +1,8 @@
+"use client";
+import { useState } from "react";
+import { EventsProvider } from "~/app/(client)/[org]/_components/events/events-provider";
+import { EventsHub } from "~/app/(client)/[org]/_components/events/events-hub";
+export default function Page() {
+ const [org,setOrg] = useState("org-a");
+ return <><button onClick={() => setOrg(org === "org-a" ? "org-b" : "org-a")}>Switch test organisation</button><EventsProvider organisationId={org}><EventsHub /></EventsProvider></>;
+}
