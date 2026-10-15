@@ -4,10 +4,11 @@ import Image from "next/image";
 import { ArrowBtn, DownloadAppBtn } from "../_components/ui/Button";
 import FeatureCard from "../_components/FeatureCard";
 import { DynamicFooter } from "../_components/footer/dynamic-footer";
-import { appStoreUrl, playStoreUrl } from "~/lib/env-urls";
+import { appStoreUrl, desktopDownloadUrl, playStoreUrl } from "~/lib/env-urls";
 
 const APP_STORE_URL = appStoreUrl();
 const PLAY_STORE_URL = playStoreUrl();
+const DESKTOP_DOWNLOAD_URL = desktopDownloadUrl();
 
 export const metadata: Metadata = {
   title: "Download Zedu App | Mobile and Desktop Learning Workspace",
@@ -221,8 +222,10 @@ const DownLoadPage = () => {
             Stay focused with a full learning workspace on your computer
           </p>
           <ArrowBtn
-            text="Download for Desktop"
-            hideArrow={false}
+            text={DESKTOP_DOWNLOAD_URL ? "Download for Desktop" : "Coming Soon"}
+            href={DESKTOP_DOWNLOAD_URL || undefined}
+            disabled={!DESKTOP_DOWNLOAD_URL}
+            hideArrow={!DESKTOP_DOWNLOAD_URL}
             className="!px-6 !py-2.5"
           />
 
