@@ -1,9 +1,10 @@
 "use client";
 import React, {
-  Fragment,
+  useCallback,
   useContext,
-  useRef,
   useEffect,
+  useEffectEvent,
+  useRef,
   useState,
 } from "react";
 
@@ -38,7 +39,7 @@ const ChannelsMessage = () => {
   const scrollableContainerRef = useRef<HTMLDivElement>(null);
   const hasDispatchedRef = useRef(false);
 
-  const clearChannelUnread = () => {
+  const clearChannelUnread = useCallback(() => {
     dispatch({
       type: ACTIONS.UPDATE_THREAD_COUNT,
       payload: {
@@ -48,19 +49,19 @@ const ChannelsMessage = () => {
       },
     });
     dispatch({ type: ACTIONS.THREAD_COUNT, payload: 0 });
-  };
+  }, [dispatch, id]);
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     if (!id) return;
     await GetRequest(`/threads/channels/${id}?page=1&limit=1`);
     clearChannelUnread();
-  };
+  }, [id, clearChannelUnread]);
 
   // Mark as read and clear Nav highlight whenever this channel is opened
   useEffect(() => {
     if (!id) return;
     getData();
-  }, [id]);
+  }, [id, getData]);
 
   useEffect(() => {
     const container = scrollableContainerRef.current;
@@ -86,12 +87,17 @@ const ChannelsMessage = () => {
     return () => {
       container.removeEventListener("scroll", handleScroll);
     };
-  }, [id]);
+  }, [getData]);
 
-  useEffect(() => {
+  // Runs when new messages arrive; reads the latest badge and user without re-running on them.
+  const markReadOnNewMessage = useEffectEvent(() => {
     if (!showBadge && notify?.user_id !== user?.user_id) {
       getData();
     }
+  });
+
+  useEffect(() => {
+    markReadOnNewMessage();
   }, [messages]);
 
   const handleEditMessage = async (content: any) => {
@@ -163,13 +169,13 @@ const ChannelsMessage = () => {
         style={{
           display: "flex",
           flexDirection: "column-reverse",
-          overflowY: "visible",
+          overflow: "visible",
         }}
         scrollableTarget="scrollableDivs"
         inverse={true}
       >
         {Object.entries(groupedMessages)?.map(([dateLabel, threads]: any) => (
-          <Fragment key={dateLabel}>
+          <div key={dateLabel} className="flex flex-col-reverse">
             {threads?.map((item: any, index: number) => {
               const nextMessage = threads[index + 1];
               const shouldShowAvatar =
@@ -236,7 +242,7 @@ const ChannelsMessage = () => {
               );
             })}
 
-            <div className="relative my-2">
+            <div className="sticky top-0 z-10 my-2">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-dotted border-[#E6EAEF]"></div>
               </div>
@@ -246,7 +252,7 @@ const ChannelsMessage = () => {
                 </span>
               </div>
             </div>
-          </Fragment>
+          </div>
         ))}
       </InfiniteScroll>
 
