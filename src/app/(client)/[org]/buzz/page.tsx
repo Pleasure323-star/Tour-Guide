@@ -1,11 +1,20 @@
 "use client";
 
 import { useContext, useState } from "react";
-import { Check, Copy, Keyboard, LinkIcon, Loader, Plus } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  Copy,
+  LinkIcon,
+  Loader,
+  Plus,
+  Video,
+} from "lucide-react";
 import { showError, showInfo } from "~/components/toast/sonner";
 import { PostRequest } from "~/utils/new-request";
 import { DataContext } from "~/store/GlobalState";
 import Image from "next/image";
+import { Button } from "~/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -100,43 +109,33 @@ export default function MeetingPage() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-12 md:p-6 md:pt-20">
-      <div className="mx-auto max-w-[800px] flex flex-col items-center text-center">
-        <h1 className="text-3xl md:text-4xl font-normal text-[#202124] dark:text-zinc-100 leading-snug">
-          Seamless video calls and meetings for every learning community.
+    <div className="min-h-screen overflow-hidden bg-gradient-to-b from-white via-white to-primary-50/40 px-4 py-10 dark:from-zinc-950 dark:via-zinc-950 dark:to-[#211a3b] sm:px-6 md:pt-16 lg:pt-20">
+      <div className="mx-auto flex max-w-[1040px] flex-col items-center text-center">
+        <h1 className="max-w-[900px] text-3xl font-semibold leading-tight tracking-[-0.02em] text-[#1f174d] dark:text-zinc-100 sm:text-4xl lg:text-5xl">
+          Seamless video calls and meetings
+          <span className="block text-primary-500">
+            for every learning community.
+          </span>
         </h1>
-        <p className="text-base md:text-lg text-zinc-500 mt-4 md:mt-2 max-w-[600px]">
+        <p className="mt-4 max-w-[660px] text-base text-[#777493] dark:text-zinc-400 sm:text-lg lg:text-xl">
           Connect classrooms, cohorts, and teams in one shared space
         </p>
 
-        <div className="w-full flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-10 md:mt-12">
+        <div className="mt-9 flex w-full max-w-[860px] flex-col items-stretch justify-center gap-3 sm:mt-10 md:flex-row md:items-center md:gap-4">
           <Popover>
             <PopoverTrigger asChild>
-              <button
+              <Button
                 disabled={startLoading}
-                className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3.5 rounded-md font-medium transition whitespace-nowrap"
+                className="h-14 w-full shrink-0 gap-3 rounded-xl bg-primary-500 px-6 text-base text-white shadow-sm hover:bg-primary-400 focus-visible:ring-primary-300 disabled:bg-primary-300 md:w-[240px]"
               >
                 {startLoading ? (
-                  <Loader className="animate-spin" size={18} />
+                  <Loader className="size-5 animate-spin" aria-hidden="true" />
                 ) : (
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 14 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12.7002 7.03353V5.23353C12.7002 4.11342 12.7002 3.55337 12.4822 3.12555C12.2905 2.74922 11.9845 2.44326 11.6082 2.25152C11.1804 2.03353 10.6203 2.03353 9.5002 2.03353H3.9002C2.78009 2.03353 2.22004 2.03353 1.79221 2.25152C1.41589 2.44326 1.10993 2.74922 0.918182 3.12555C0.700195 3.55337 0.700195 4.11342 0.700195 5.23353V10.8335C0.700195 11.9536 0.700195 12.5137 0.918182 12.9415C1.10993 13.3178 1.41589 13.6238 1.79221 13.8155C2.22004 14.0335 2.78009 14.0335 3.9002 14.0335H7.03353M12.7002 6.03353H0.700195M9.36686 0.700195V3.36686M4.03353 0.700195V3.36686M10.7002 13.3669V9.36686M8.7002 11.3669H12.7002"
-                      stroke="white"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <Video className="size-5" aria-hidden="true" />
                 )}
                 New meeting
-              </button>
+                <ChevronDown className="ml-auto size-5" aria-hidden="true" />
+              </Button>
             </PopoverTrigger>
             <PopoverContent
               align="start"
@@ -163,40 +162,45 @@ export default function MeetingPage() {
 
           <form
             onSubmit={handleJoin}
-            className="w-full md:w-auto flex flex-col md:flex-row gap-4 items-center"
+            className="flex w-full flex-col items-stretch gap-3 sm:flex-row md:gap-4"
           >
-            <div className="relative w-full md:w-auto">
-              <Keyboard
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
-                size={20}
+            <label className="relative block min-w-0 flex-1 md:w-[320px]">
+              <span className="sr-only">Meeting code or link</span>
+              <LinkIcon
+                className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#85819e]"
+                aria-hidden="true"
               />
               <input
                 type="text"
                 placeholder="Enter a code or link"
                 value={roomId}
                 onChange={(e) => setRoomId(e.target.value)}
-                className="w-full md:w-64 pl-10 pr-4 py-3.5 border border-zinc-300 rounded-md focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all"
+                className="h-14 w-full rounded-xl border border-[#dedaf2] bg-white pl-12 pr-4 text-base text-[#302b50] outline-none transition placeholder:text-[#8e8aa5] focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:border-white/15 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
               />
-            </div>
+            </label>
 
-            <button
+            <Button
               type="submit"
               disabled={!roomId || joinLoading}
-              className="flex itms-center justify-center gap-1 w-full md:w-auto text-blue-600 font-semibold disabled:text-zinc-400 hover:text-blue-700 transition px-2 py-2"
+              variant="outline"
+              className="h-14 w-full shrink-0 gap-2 rounded-xl border-[#dedaf2] bg-white px-7 text-base font-semibold text-primary-500 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-500 focus-visible:ring-primary-300 disabled:text-zinc-400 dark:border-white/15 dark:bg-zinc-900 dark:hover:bg-white/10 sm:w-28"
             >
-              {joinLoading && <Loader size={20} className="animate-spin" />}
+              {joinLoading && (
+                <Loader className="size-5 animate-spin" aria-hidden="true" />
+              )}
               {joinLoading ? "Joining..." : "Join"}
-            </button>
+            </Button>
           </form>
         </div>
 
-        <div className="w-full mt-12 md:mt-20 flex justify-center px-4">
-          <div className="relative w-full max-w-[800px] aspect-[16/10]">
+        <div className="mt-8 flex w-full justify-center sm:mt-10 md:mt-12">
+          <div className="relative aspect-[3/2] w-full max-w-[960px]">
             <Image
-              src="/image/meeting-image.png"
-              alt="Meetings Illustration"
+              src="/image/buzz-meeting-illustration.webp"
+              alt="Student joining an online classroom video call"
               fill
-              className="object-contain opacity-95"
+              sizes="(max-width: 768px) 100vw, 960px"
+              className="object-contain"
               priority
             />
           </div>
