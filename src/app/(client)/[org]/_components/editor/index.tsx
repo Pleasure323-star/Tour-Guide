@@ -805,6 +805,9 @@ const UseTextEditor = (
     },
     onBlur: () => handleTypingRef.current?.(false),
     editorProps: {
+      attributes: {
+        spellcheck: "true",
+      },
       handlePaste(view, event, slice) {
         const items = event.clipboardData?.items;
 
