@@ -74,11 +74,8 @@ export function linkifyText(
             event.preventDefault();
             options.onMessageLinkClick?.(linkHref);
           }}
-          style={{
-            textDecoration: "underline",
-            color: "blue",
-            cursor: "pointer",
-          }}
+          className="smart-link-pill"
+          title={linkHref}
         >
           {part}
         </a>
@@ -92,7 +89,8 @@ export function linkifyText(
         {...(openInNewTab
           ? { target: "_blank", rel: "noopener noreferrer" }
           : {})}
-        style={{ textDecoration: "underline", color: "blue" }}
+        className="smart-link-pill"
+        title={linkHref}
       >
         {part}
       </a>

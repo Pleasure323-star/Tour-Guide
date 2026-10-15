@@ -53,6 +53,7 @@ import {
   isPreviewableDocument,
 } from "~/utils/document-files";
 import { useRouter } from "next/navigation";
+import { cn } from "~/lib/utils";
 
 /** @eslint-disable */
 
@@ -228,6 +229,17 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
   const renderTextWithMentions = (node: any) => {
     if (!node || !node.props) return node;
 
+    if (node.type === "a" || node.props?.href) {
+      return React.cloneElement(node, {
+        className: cn("smart-link-pill", node.props.className),
+        title:
+          node.props.title ||
+          (typeof node.props.href === "string" ? node.props.href : undefined),
+        target: "_blank",
+        rel: "noopener noreferrer",
+      });
+    }
+
     const props = node.props;
     const children = props.children;
 
@@ -258,9 +270,13 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
 
     if (typeof children === "string") {
       const mentionRegex = /([@#][a-zA-Z0-9_.-]+(?:\s[a-zA-Z0-9_.-]+)*)/g;
+      if (!mentionRegex.test(children)) {
+        return node;
+      }
+      mentionRegex.lastIndex = 0;
       const parts = children.split(mentionRegex);
 
-      return parts.map((part: any, i: number) => {
+      const mappedChildren = parts.map((part: any, i: number) => {
         if (typeof part === "string" && part.startsWith("@")) {
           return (
             <GlobalMention
@@ -287,6 +303,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
         }
         return linkifyText(part, linkifyOptions);
       });
+
+      return React.cloneElement(node, { children: mappedChildren });
     }
 
     return node;
@@ -324,12 +342,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
                   </p>
                 );
               },
-              a: ({ ...props }) => (
+              a: ({ className, href, ...props }) => (
                 <a
-                  {...props}
-                  style={{ textDecoration: "underline", color: "blue" }}
+                  href={href}
+                  className={cn("smart-link-pill", className)}
+                  title={typeof href === "string" ? href : undefined}
                   target="_blank"
                   rel="noopener noreferrer"
+                  {...props}
                 />
               ),
               table: (props) => (

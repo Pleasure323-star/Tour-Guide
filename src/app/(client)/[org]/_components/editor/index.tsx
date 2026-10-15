@@ -10,6 +10,7 @@ import Code from "@tiptap/extension-code";
 import HardBreak from "@tiptap/extension-hard-break";
 import SlackCodeBlock from "./slack-code-block";
 import { AppleEmoji } from "./apple-emoji";
+import { closeHistory } from "@tiptap/pm/history";
 
 // Shift+Enter: MessageHardBreak. Plain Enter: message-box (send / lists).
 const MessageHardBreak = HardBreak.extend({
@@ -688,6 +689,7 @@ const UseTextEditor = (
       () => slashPopulateRef.current!
     )();
 
+  const editorRef = useRef<any>(null);
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -780,7 +782,7 @@ const UseTextEditor = (
         autolink: true,
         defaultProtocol: "https",
         HTMLAttributes: {
-          class: "text-primary-500",
+          class: "smart-link-pill",
         },
       }),
       Code.configure({
@@ -820,10 +822,98 @@ const UseTextEditor = (
           }
         }
 
+        const pastedText = event.clipboardData?.getData("text/plain")?.trim();
+        if (pastedText && /^https?:\/\/[^\s]+$/i.test(pastedText)) {
+          let isValid = false;
+          try {
+            const parsed = new URL(pastedText);
+            isValid =
+              parsed.protocol === "http:" || parsed.protocol === "https:";
+          } catch {
+            isValid = false;
+          }
+
+          if (isValid) {
+            const { state } = view;
+            const { empty } = state.selection;
+
+            // If text is already highlighted, let TipTap attach the link to the selected text
+            if (!empty) {
+              return false;
+            }
+
+            const url = pastedText;
+            const { tr, schema } = state;
+            const insertPos = tr.selection.from;
+            const linkMark = schema.marks.link?.create({ href: url });
+            const textNode = schema.text(url, linkMark ? [linkMark] : []);
+            const spaceNode = schema.text(" ");
+
+            tr.replaceSelectionWith(textNode, false);
+            tr.insert(tr.selection.to, spaceNode);
+            view.dispatch(tr);
+
+            const editorInstance = editorRef.current || (view as any).editor;
+            let trackedPos = insertPos;
+
+            const onTransaction = ({ transaction }: { transaction: any }) => {
+              if (transaction?.mapping) {
+                trackedPos = transaction.mapping.map(trackedPos, 1);
+              }
+            };
+
+            editorInstance?.on("transaction", onTransaction);
+            const cleanup = () => {
+              editorInstance?.off("transaction", onTransaction);
+            };
+
+            // Fetch metadata to auto-embed with page title
+            void fetch(`/api/link-preview?url=${encodeURIComponent(url)}`)
+              .then((res) => (res.ok ? res.json() : null))
+              .then((data) => {
+                cleanup();
+                if (editorInstance?.isDestroyed) return;
+
+                const rawTitle = data?.title?.trim();
+                if (rawTitle && rawTitle !== "No Title" && rawTitle !== url) {
+                  const node = view.state.doc.nodeAt(trackedPos);
+                  if (
+                    node &&
+                    node.isText &&
+                    node.text === url &&
+                    node.marks.some(
+                      (m) => m.type.name === "link" && m.attrs.href === url
+                    )
+                  ) {
+                    const updateTr = view.state.tr;
+                    closeHistory(updateTr);
+                    const newTextNode = view.state.schema.text(
+                      rawTitle,
+                      node.marks
+                    );
+                    updateTr.replaceWith(
+                      trackedPos,
+                      trackedPos + node.nodeSize,
+                      newTextNode
+                    );
+                    view.dispatch(updateTr);
+                  }
+                }
+              })
+              .catch(() => {
+                cleanup();
+              });
+
+            return true;
+          }
+        }
+
         return false;
       },
     },
   });
+
+  editorRef.current = editor;
 
   return {
     editor,
