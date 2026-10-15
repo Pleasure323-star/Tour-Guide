@@ -113,8 +113,15 @@ const Header: React.FC = () => {
               <div className="flex shrink-0 items-center">
                 <Link href="/">
                   <Image
-                    className="h-8 w-auto"
+                    className="h-8 w-auto dark:hidden dark:lg:block"
                     src={windowWidth < 1024 && isOpen ? logoWhite : logoBlack}
+                    alt="Logo"
+                    width={100}
+                    height={100}
+                  />
+                  <Image
+                    className="hidden h-8 w-auto dark:block dark:lg:hidden"
+                    src={logoWhite}
                     alt="Logo"
                     width={100}
                     height={100}
@@ -222,11 +229,13 @@ const Header: React.FC = () => {
 
             <div
               onClick={toggleMenu}
-              className="relative z-50 flex h-6 w-6 cursor-pointer items-center justify-center lg:hidden"
+              className="relative z-50 flex h-6 w-6 cursor-pointer items-center justify-center dark:text-white lg:hidden"
             >
               <div
                 className={`absolute h-0.5 w-full bg-current transition-transform duration-300 ease-in-out ${
-                  isOpen ? "rotate-45 bg-gray-50" : "-translate-y-1.5"
+                  isOpen
+                    ? "rotate-45 bg-gray-50 dark:bg-white"
+                    : "-translate-y-1.5"
                 }`}
               />
               <div
@@ -236,7 +245,9 @@ const Header: React.FC = () => {
               />
               <div
                 className={`absolute h-0.5 w-full bg-current transition-transform duration-300 ease-in-out ${
-                  isOpen ? "-rotate-45 bg-gray-50" : "translate-y-1.5"
+                  isOpen
+                    ? "-rotate-45 bg-gray-50 dark:bg-white"
+                    : "translate-y-1.5"
                 }`}
               />
             </div>

@@ -51,7 +51,7 @@ export default function RootLayout({
       </head>
 
       <body className="max-w-screen overflow-x-hidden" suppressHydrationWarning>
-        <ThemeProvider>
+        <ThemeProvider forcedTheme="dark">
           <ClientLayout>
             <DataProvider>{children}</DataProvider>
           </ClientLayout>
