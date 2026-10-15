@@ -72,7 +72,7 @@ const supportLinks: FooterLink[] = [
 ];
 
 const resourcesLinks: FooterLink[] = [
-  { id: 0, label: "Blogs", href: "/resources" },
+  { id: 0, label: "Resource Library", href: "/resources" },
   { id: 2, label: "Privacy Policy", href: "/policy" },
   { id: 3, label: "Terms of Service", href: "/terms-of-service" },
 ];
