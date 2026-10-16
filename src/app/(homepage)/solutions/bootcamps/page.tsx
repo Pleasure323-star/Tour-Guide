@@ -190,7 +190,6 @@ const BootCampsSolutionsPage = () => {
               title={card.title}
               desc={card.desc}
               showBadge
-              showArrow
               className="h-full"
             />
           ))}
