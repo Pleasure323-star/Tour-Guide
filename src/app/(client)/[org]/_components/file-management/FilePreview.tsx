@@ -13,12 +13,31 @@ import {
 import FileViewer from "react-file-viewer";
 import "./file-preview-viewer.css";
 import { showError } from "~/components/toast/sonner";
+import { formatFileSize } from "./FileList";
+
+type FileSize = number | string | null | undefined;
+
+const formatPreviewFileSize = (size: FileSize) => {
+  if (
+    size === null ||
+    size === undefined ||
+    (typeof size === "string" && size.trim() === "")
+  ) {
+    return "Size unavailable";
+  }
+
+  const bytes = typeof size === "number" ? size : Number(size);
+  if (!Number.isFinite(bytes) || bytes < 0) return "Size unavailable";
+
+  return formatFileSize(bytes);
+};
+
 interface FilePreviewProps {
   isOpen: boolean;
   onClose: () => void;
   file: {
     fileName: string;
-    size: string;
+    size: FileSize;
     type: string;
     previewUrl?: string;
     pageCount?: number;
@@ -30,7 +49,7 @@ interface FilePreviewProps {
 interface FileRenderProps {
   file: {
     fileName: string;
-    size: string;
+    size: FileSize;
     type: string;
     previewUrl?: string;
     pageCount?: number;
@@ -172,7 +191,9 @@ const FilePreview: React.FC<FilePreviewProps> = ({
               <h3 className="text-xs lg:text-sm font-medium text-gray-900">
                 {file.fileName}
               </h3>
-              <p className="text-xs lg:text-sm text-gray-500">{file.size}</p>
+              <p className="text-xs lg:text-sm text-gray-500">
+                {formatPreviewFileSize(file.size)}
+              </p>
             </div>
           </div>
           {/* Preview header controls */}
