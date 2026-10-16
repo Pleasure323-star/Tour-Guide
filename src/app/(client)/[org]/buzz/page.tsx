@@ -34,6 +34,7 @@ import {
 
 export default function MeetingPage() {
   const [roomId, setRoomId] = useState("");
+  const [joinError, setJoinError] = useState("");
   const [startLoading, setStartLoading] = useState(false);
   const [joinLoading, setJoinLoading] = useState(false);
   const [isLaterModalOpen, setIsLaterModalOpen] = useState(false);
@@ -44,16 +45,28 @@ export default function MeetingPage() {
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!roomId.trim() || !orgSlug) return;
-
-    setJoinLoading(true);
+    if (!orgSlug) return;
 
     let extractedId = roomId.trim();
     if (extractedId.includes("/")) {
-      const parts = extractedId.split("/");
-      extractedId = parts[parts.length - 1] || extractedId;
+      try {
+        const url = new URL(extractedId, window.location.origin);
+        extractedId =
+          url.protocol === "http:" || url.protocol === "https:"
+            ? url.pathname.match(/^\/[^/]+\/buzz\/([^/]+)\/?$/)?.[1] || ""
+            : "";
+      } catch {
+        extractedId = "";
+      }
     }
 
+    if (!/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/.test(extractedId)) {
+      setJoinError("Enter a valid Buzz code or link.");
+      return;
+    }
+
+    setJoinError("");
+    setJoinLoading(true);
     openBuzzInNewTab(orgSlug, extractedId);
     setJoinLoading(false);
   };
@@ -174,9 +187,23 @@ export default function MeetingPage() {
                 type="text"
                 placeholder="Enter a code or link"
                 value={roomId}
-                onChange={(e) => setRoomId(e.target.value)}
+                onChange={(e) => {
+                  setRoomId(e.target.value);
+                  setJoinError("");
+                }}
+                aria-invalid={Boolean(joinError)}
+                aria-describedby={joinError ? "buzz-join-error" : undefined}
                 className="h-14 w-full rounded-xl border border-[#dedaf2] bg-white pl-12 pr-4 text-base text-[#302b50] outline-none transition placeholder:text-[#8e8aa5] focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:border-white/15 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500"
               />
+              {joinError && (
+                <p
+                  id="buzz-join-error"
+                  role="alert"
+                  className="absolute left-0 top-full mt-1 text-left text-sm text-red-600"
+                >
+                  {joinError}
+                </p>
+              )}
             </label>
 
             <Button
