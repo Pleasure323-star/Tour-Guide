@@ -68,7 +68,7 @@ export default function RootLayout({
   return (
     <ForceLightTheme>
       <DataProvider>
-        <div className="w-full">
+        <div className="zedu-marketing w-full">
           <Header />
           <div className="pt-12 min-w-screen overflow-x-hidden">{children}</div>
           <Footer />
