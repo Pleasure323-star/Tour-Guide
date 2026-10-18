@@ -56,6 +56,11 @@ const solutionLinks: FooterLink[] = [
     label: "Universities",
     href: "/solutions/universities",
   },
+  {
+    id: 3,
+    label: "Cohort Programs",
+    href: "/for/cohort-based-programs",
+  },
 ];
 
 const supportLinks: FooterLink[] = [
@@ -72,16 +77,16 @@ const supportLinks: FooterLink[] = [
 ];
 
 const resourcesLinks: FooterLink[] = [
-  { id: 0, label: "Resource Library", href: "/resources" },
+  { id: 0, label: "Blogs", href: "/resources" },
   { id: 2, label: "Privacy Policy", href: "/policy" },
   { id: 3, label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const footerSections = [
-  { title: "Products", links: productLinks },
-  { title: "Solutions", links: solutionLinks },
-  { title: "Zedu", links: supportLinks },
-  { title: "Resources", links: resourcesLinks },
+  { title: "Products", links: productLinks, twoColumns: true },
+  { title: "Solutions", links: solutionLinks, twoColumns: true },
+  { title: "Zedu", links: supportLinks, twoColumns: false },
+  { title: "Resources", links: resourcesLinks, twoColumns: false },
 ];
 
 const socialLinks = [
@@ -183,18 +188,20 @@ const Footer = () => {
                 Get Zedu today
               </h3>
             </div>
+            <p className="text-white/90">
+              Stay in the loop. Get product updates, learning updates and ideas
+              to do more with Zedu.
+            </p>
             <form
               onSubmit={handleSubmit}
               className="flex w-full flex-col gap-4"
             >
-              <label className="font-medium text-white/95">
-                Sign up to our Newsletter
-              </label>
               <div>
-                <div className="flex h-14 w-full items-center justify-between gap-2 rounded-xl bg-white p-1.5">
+                <div className="flex h-14 w-full items-center justify-between gap-2 rounded-full bg-white p-1.5">
                   <input
                     type="email"
                     name="newsletter"
+                    aria-label="Email address"
                     placeholder="johndoe@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -202,7 +209,7 @@ const Footer = () => {
                   />
                   <button
                     type="submit"
-                    className="relative flex h-full items-center justify-center rounded-[10px] bg-primary-500 px-4 py-2 text-sm font-medium leading-5 transition-all hover:bg-opacity-80"
+                    className="relative flex h-full items-center justify-center rounded-full bg-primary-500 px-4 py-2 text-sm font-medium leading-5 transition-all hover:bg-opacity-80"
                   >
                     <p className={loading ? "opacity-0" : ""}>Subscribe</p>
                     {loading ? (
@@ -252,13 +259,19 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid w-full grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 sm:gap-x-10 xl:gap-16 xl:border-l xl:border-neutral-50/25 xl:pl-14">
+          <div className="grid w-full grid-cols-1 gap-12 sm:grid-cols-2 sm:gap-14 xl:grid-cols-4 xl:gap-16 lg:border-l lg:border-neutral-50/25 lg:pl-14">
             {footerSections.map((section) => (
-              <div key={section.title} className="flex flex-col gap-5 sm:gap-8">
+              <div key={section.title} className="flex flex-col gap-8">
                 <h2 className="text-xl font-semibold text-white">
                   {section.title}
                 </h2>
-                <div className="flex flex-col gap-4 text-neutral-200 sm:gap-5">
+                <div
+                  className={`text-neutral-200 ${
+                    section.twoColumns
+                      ? "grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-1"
+                      : "flex flex-col gap-5"
+                  }`}
+                >
                   {section.links.map((item) => (
                     <Link
                       key={item.id}
