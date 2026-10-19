@@ -7,6 +7,7 @@ import ReplyCard from "../reply-card";
 import UserAvatar from "~/components/layout/user-avatar";
 import MessageItem from "../ChannelMessage/message-item";
 import { formatSlackStyleTimestamp } from "~/utils/format-slack-timestamp";
+import MessageAuthor from "../ChannelMessage/message-author";
 
 interface MessageProps {
   item: any;
@@ -48,12 +49,10 @@ const Message = ({ item, shouldShowAvatar }: MessageProps) => {
 
       <div className="w-full min-w-0">
         {shouldShowAvatar && (
-          <div className="flex items-center gap-2">
-            <span className="text-[15px] font-bold text-[#1D2939]">
-              {item?.username || item?.email}
-            </span>
+          <div className="flex min-w-0 items-center gap-2">
+            <MessageAuthor item={item} />
 
-            <span className="mt-[1px] text-xs text-[#98A2B3]">
+            <span className="mt-[1px] shrink-0 text-xs text-[#98A2B3]">
               {formatSlackStyleTimestamp(item?.created_at)}
             </span>
           </div>

@@ -39,6 +39,7 @@ import { TooltipArrow } from "@radix-ui/react-tooltip";
 import { cn } from "~/lib/utils";
 import UserAvatar from "~/components/layout/user-avatar";
 import { formatReactionUsers } from "~/utils/format-reaction-users";
+import MessageAuthor from "./message-author";
 
 interface MessageProps {
   item: any;
@@ -249,15 +250,10 @@ const Message = ({
 
       <div className="w-full">
         {shouldShowAvatar && (
-          <div className="flex items-center gap-2">
-            <span
-              className="hover font-bold text-[15px] text-[#1D2939] cursor-pointer"
-              onClick={handleOpen}
-            >
-              {item?.username || item?.email}
-            </span>
+          <div className="flex min-w-0 items-center gap-2">
+            <MessageAuthor item={item} onClick={handleOpen} />
 
-            <span className="text-xs text-[#98A2B3] mt-[1px]">
+            <span className="mt-[1px] shrink-0 text-xs text-[#98A2B3]">
               {new Date(item?.created_at).toLocaleTimeString([], {
                 hour: "numeric",
                 minute: "2-digit",

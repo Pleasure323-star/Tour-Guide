@@ -56,6 +56,11 @@ const solutionLinks: FooterLink[] = [
     label: "Universities",
     href: "/solutions/universities",
   },
+  {
+    id: 3,
+    label: "Cohort Programs",
+    href: "/for/cohort-based-programs",
+  },
 ];
 
 const supportLinks: FooterLink[] = [
@@ -183,18 +188,20 @@ const Footer = () => {
                 Get Zedu today
               </h3>
             </div>
+            <p className="text-white/90">
+              Stay in the loop. Get product updates, learning updates and ideas
+              to do more with Zedu.
+            </p>
             <form
               onSubmit={handleSubmit}
               className="flex w-full flex-col gap-4"
             >
-              <label className="font-medium text-white/95">
-                Sign up to our Newsletter
-              </label>
               <div>
-                <div className="flex h-14 w-full items-center justify-between gap-2 rounded-xl bg-white p-1.5">
+                <div className="flex h-14 w-full items-center justify-between gap-2 rounded-full bg-white p-1.5">
                   <input
                     type="email"
                     name="newsletter"
+                    aria-label="Email address"
                     placeholder="johndoe@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -202,7 +209,7 @@ const Footer = () => {
                   />
                   <button
                     type="submit"
-                    className="relative flex h-full items-center justify-center rounded-[10px] bg-primary-500 px-4 py-2 text-sm font-medium leading-5 transition-all hover:bg-opacity-80"
+                    className="relative flex h-full items-center justify-center rounded-full bg-primary-500 px-4 py-2 text-sm font-medium leading-5 transition-all hover:bg-opacity-80"
                   >
                     <p className={loading ? "opacity-0" : ""}>Subscribe</p>
                     {loading ? (
