@@ -20,7 +20,11 @@ function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({ password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState({
+    code: "",
+    password: "",
+    confirmPassword: "",
+  });
   const router = useRouter();
   const [buttonloading, setButtonloading] = useState(false);
   const searchParams = useSearchParams();
@@ -44,7 +48,11 @@ function ResetPassword() {
   };
 
   const validateForm = () => {
-    const newErrors = { password: "", confirmPassword: "" };
+    const newErrors = { code: "", password: "", confirmPassword: "" };
+    if (value.length < 6) {
+      newErrors.code = "Enter the 6-digit code from your email";
+    }
+
     if (!password) {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
@@ -56,7 +64,14 @@ function ResetPassword() {
     }
 
     setErrors(newErrors);
-    return !newErrors.password && !newErrors.confirmPassword;
+    return !newErrors.code && !newErrors.password && !newErrors.confirmPassword;
+  };
+
+  const handleCodeChange = (code: string) => {
+    setValue(code);
+    if (errors.code) {
+      setErrors((prevErrors) => ({ ...prevErrors, code: "" }));
+    }
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,18 +165,19 @@ function ResetPassword() {
             <div className="flex flex-col gap-[16px] mb-[32px]">
               <div className="w-full flex flex-col gap-[8px] relative">
                 <label
-                  htmlFor="password"
+                  htmlFor="code"
                   className="text-[14px] font-[400] leading-[21px]"
                 >
                   Enter code from email
                 </label>
 
                 <InputOTP
+                  id="code"
                   maxLength={6}
                   className="flex w-full"
                   // onComplete={onOtpSubmit}
                   value={value}
-                  onChange={setValue}
+                  onChange={handleCodeChange}
                   disabled={loading}
                 >
                   {...[0, 1, 2, 3, 4, 5].map((number_) => (
@@ -170,6 +186,11 @@ function ResetPassword() {
                     </InputOTPGroup>
                   ))}
                 </InputOTP>
+                {errors.code && (
+                  <small className="text-xs text-[#F81404]">
+                    {errors.code}
+                  </small>
+                )}
               </div>
 
               <div className="w-full flex flex-col gap-[8px] relative">
@@ -182,6 +203,7 @@ function ResetPassword() {
                 <div className="w-full flex flex-col gap-[2px]">
                   <div className="relative">
                     <input
+                      id="password"
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={handlePasswordChange}
@@ -221,6 +243,7 @@ function ResetPassword() {
                 <div className="w-full flex flex-col gap-[2px]">
                   <div className="relative">
                     <input
+                      id="confirmPassword"
                       type={showPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={handleConfirmPasswordChange}

@@ -11,6 +11,10 @@ import { useToast } from "~/components/ui/use-toast";
 import { cn } from "~/lib/utils";
 import { contactSalesUrl } from "~/lib/env-urls";
 
+const phoneNumberPattern = /^\+?[0-9\s()-]+$/;
+
+const getPhoneDigits = (value: string) => value.replace(/\D/g, "");
+
 const contactSalesSchema = z.object({
   name: z
     .string()
@@ -27,9 +31,13 @@ const contactSalesSchema = z.object({
     .trim()
     .min(1, "Phone number is required")
     .refine(
-      (value) => /^\d{10,15}$/.test(value.replace(/\D/g, "")),
-      "Please enter a valid phone number"
-    ),
+      (value) => phoneNumberPattern.test(value),
+      "Phone number can only contain digits and standard phone formatting"
+    )
+    .refine((value) => {
+      const digits = getPhoneDigits(value);
+      return digits.length >= 10 && digits.length <= 15;
+    }, "Phone number must contain between 10 and 15 digits"),
   message: z
     .string()
     .trim()
@@ -74,6 +82,9 @@ const getFormErrors = (data: ContactSalesFormData): FormErrors => {
   return nextErrors;
 };
 
+const fieldClassName =
+  "h-[52px] rounded-[14px] border border-[#6f4ef6]/25 bg-white px-3.5 text-[#222] focus:border-[#6f4ef6] focus:ring-2 focus:ring-[#6f4ef6]/30";
+
 export const ContactSalesForm = () => {
   const [formData, setFormData] =
     useState<ContactSalesFormData>(initialFormData);
@@ -110,7 +121,7 @@ export const ContactSalesForm = () => {
 
     setSending(true);
 
-    const normalizedPhone = formData.phone.replace(/\D/g, "");
+    const normalizedPhone = getPhoneDigits(formData.phone);
     const contactData = {
       name: formData.name.trim(),
       email: formData.email.trim(),
@@ -152,10 +163,10 @@ export const ContactSalesForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full rounded-2xl bg-white p-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12)] sm:p-6"
+      className="w-full min-w-0 rounded-[28px] bg-white p-6 shadow-[0_28px_60px_-18px_rgba(38,24,102,0.28)] ring-1 ring-[#6f4ef6]/5 sm:p-8 lg:p-9"
     >
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        <div className="flex flex-col gap-1.5">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:gap-x-5 lg:gap-y-6">
+        <div className="flex flex-col gap-1.5 lg:gap-4">
           <Label htmlFor="name" className="text-sm font-medium text-[#222]">
             Name
           </Label>
@@ -167,17 +178,14 @@ export const ContactSalesForm = () => {
             onBlur={() => validateField("name")}
             placeholder="Enter your full name"
             aria-invalid={Boolean(errors.name)}
-            className={cn(
-              "h-10 border-[#d9d9df] p-3 text-sm text-[#222] focus:ring-1 focus:ring-primary-500",
-              errors.name && "border-red-500"
-            )}
+            className={cn(fieldClassName, errors.name && "border-red-500")}
           />
           {errors.name ? (
             <p className="text-xs text-red-500">{errors.name}</p>
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1.5 lg:gap-4">
           <Label htmlFor="email" className="text-sm font-medium text-[#222]">
             Email Address
           </Label>
@@ -190,32 +198,29 @@ export const ContactSalesForm = () => {
             onBlur={() => validateField("email")}
             placeholder="Enter your email"
             aria-invalid={Boolean(errors.email)}
-            className={cn(
-              "h-10 border-[#d9d9df] p-3 text-sm text-[#222] focus:ring-1 focus:ring-primary-500",
-              errors.email && "border-red-500"
-            )}
+            className={cn(fieldClassName, errors.email && "border-red-500")}
           />
           {errors.email ? (
             <p className="text-xs text-red-500">{errors.email}</p>
           ) : null}
         </div>
 
-        <div className="sm:col-span-2 flex flex-col gap-1.5">
+        <div className="sm:col-span-2 flex flex-col gap-1.5 lg:gap-4">
           <Label htmlFor="phone" className="text-sm font-medium text-[#222]">
             Phone Number
           </Label>
           <Input
             id="phone"
             name="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
             value={formData.phone}
             onChange={(event) => updateField("phone", event.target.value)}
             onBlur={() => validateField("phone")}
             placeholder="Enter your phone number"
             aria-invalid={Boolean(errors.phone)}
-            className={cn(
-              "h-10 border-[#d9d9df] p-3 text-sm text-[#222] focus:ring-1 focus:ring-primary-500",
-              errors.phone && "border-red-500"
-            )}
+            className={cn(fieldClassName, errors.phone && "border-red-500")}
           />
           {errors.phone ? (
             <p className="text-xs text-red-500">{errors.phone}</p>
@@ -223,7 +228,7 @@ export const ContactSalesForm = () => {
         </div>
       </div>
 
-      <div className="mt-3 flex flex-col gap-1.5 sm:mt-4">
+      <div className="mt-3 flex flex-col gap-1.5 sm:mt-4 lg:mt-6 lg:gap-4">
         <Label htmlFor="message" className="text-sm font-medium text-[#222]">
           Message
         </Label>
@@ -236,7 +241,7 @@ export const ContactSalesForm = () => {
           rows={8}
           aria-invalid={Boolean(errors.message)}
           className={cn(
-            "min-h-[140px] border-[#d9d9df] px-3 py-2 text-sm text-[#222] focus:ring-1 focus:ring-primary-500",
+            "min-h-[140px] resize-y rounded-[14px] border border-[#6f4ef6]/25 bg-white px-3.5 py-2 text-[#222] focus:border-[#6f4ef6] focus:ring-2 focus:ring-[#6f4ef6]/30 lg:max-h-[420px]",
             errors.message && "border-red-500"
           )}
         />
@@ -248,7 +253,7 @@ export const ContactSalesForm = () => {
       <Button
         type="submit"
         disabled={sending}
-        className="mt-4 h-11 w-full rounded-full bg-[#6f4ef6] text-sm font-medium text-white hover:bg-[#6f4ef6] flex items-center gap-2"
+        className="mt-4 flex h-[56px] w-full items-center justify-center gap-2 rounded-full bg-[#6f4ef6] text-base font-semibold text-white hover:bg-[#5c3ce0] lg:mt-6"
       >
         {!sending ? (
           <Mail className="h-4 w-4" />
@@ -258,7 +263,7 @@ export const ContactSalesForm = () => {
         {!sending ? "Send" : "Sending"}
       </Button>
 
-      <p className="mt-3 text-[10px] leading-relaxed text-[#7a7a7a] sm:text-[11px]">
+      <p className="mt-3 text-[12px] leading-5 text-[#4b4b55] md:text-[13px] lg:mt-6">
         By continuing, I authorize Zedu to contact me about Zedu&apos;s
         offerings. I understand I can opt out by contacting Zedu.
       </p>
